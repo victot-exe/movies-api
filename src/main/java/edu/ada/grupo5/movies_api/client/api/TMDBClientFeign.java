@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "tmdbClient", url = "https://api.themoviedb.org/3/trending/movie", configuration = TMDBClientFeignConfig.class)
+@FeignClient(name = "tmdbClient", url = "${tmdb.api.url}", configuration = TMDBClientFeignConfig.class)
 public interface TMDBClientFeign {
 
-    @GetMapping("/{timeWindow}")
+    @GetMapping("/trending/movie/{timeWindow}")
     MovieResponseDTO getTrendingMovies(@PathVariable("timeWindow") String timeWindow,
                                        @RequestParam("language") String language);
 
