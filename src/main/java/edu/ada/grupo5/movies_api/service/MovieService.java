@@ -16,6 +16,7 @@ public class MovieService {
     }
 
     public MovieResponseDTO getTrendingMovies(String timeWindow, String language) {
-        return tmdbClientFeign.getTrendingMovies(timeWindow, language);
+        MovieResponseDTO movieResponseDTO = tmdbClientFeign.getTrendingMovies(timeWindow, language);
+        return movieResponseDTO;
     }
 }

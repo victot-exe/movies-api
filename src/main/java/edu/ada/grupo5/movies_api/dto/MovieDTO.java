@@ -1,9 +1,15 @@
 package edu.ada.grupo5.movies_api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MovieDTO {
     private int id;
     private String title;

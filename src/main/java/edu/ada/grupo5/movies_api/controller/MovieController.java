@@ -16,7 +16,7 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping("/trending/{timeWindow}")
+    @GetMapping("/tmdb/trending/movies/{timeWindow}")
     public MovieResponseDTO getTrendingMovies(@PathVariable String timeWindow,
                                               @RequestParam(defaultValue = "en-US") String language) {
         return movieService.getTrendingMovies(timeWindow, language);
