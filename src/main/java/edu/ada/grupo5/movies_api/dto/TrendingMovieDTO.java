@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieDTO {
+public class TrendingMovieDTO {
     private int id;
     private String title;
     private String overview;

@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieResponseDTO {
+public class TrendingMovieResponseDTO {
     private int page;
-    private List<MovieDTO> results;
+    private List<TrendingMovieDTO> results;
     @JsonProperty("total_pages")
     private int totalPages;
     @JsonProperty("total_results")
