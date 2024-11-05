@@ -1,8 +1,8 @@
 package edu.ada.grupo5.movies_api.service;
 
 import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
-import edu.ada.grupo5.movies_api.dto.GenresResponseDTO;
-import edu.ada.grupo5.movies_api.dto.TrendingMovieResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +17,10 @@ public class MovieService {
     }
 
     public TrendingMovieResponseDTO getTrendingMovies(String timeWindow, String language) {
-        TrendingMovieResponseDTO trendingMovieResponseDTO = tmdbClientFeign.getTrendingMovies(timeWindow, language);
-        return trendingMovieResponseDTO;
+        return tmdbClientFeign.getTrendingMovies(timeWindow, language);
     }
 
     public GenresResponseDTO getGenres(String language) {
-        GenresResponseDTO genresResponseDTO = tmdbClientFeign.getGenres(language);
-        return genresResponseDTO;
+        return tmdbClientFeign.getGenres(language);
     }
 }

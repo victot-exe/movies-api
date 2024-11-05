@@ -1,4 +1,4 @@
-package edu.ada.grupo5.movies_api.dto;
+package edu.ada.grupo5.movies_api.dto.tmdb;
 
 import lombok.*;
 

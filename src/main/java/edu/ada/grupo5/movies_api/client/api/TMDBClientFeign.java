@@ -1,7 +1,7 @@
 package edu.ada.grupo5.movies_api.client.api;
 
-import edu.ada.grupo5.movies_api.dto.GenresResponseDTO;
-import edu.ada.grupo5.movies_api.dto.TrendingMovieResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
