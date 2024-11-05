@@ -1,5 +1,6 @@
 package edu.ada.grupo5.movies_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +26,14 @@ public class User implements UserDetails, Serializable{
     private String name;
     private String login;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    public User(String login, String password, UserRole role) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
