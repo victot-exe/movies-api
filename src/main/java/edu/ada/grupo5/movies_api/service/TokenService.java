@@ -1,11 +1,13 @@
 package edu.ada.grupo5.movies_api.service;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.model.User;
+import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
+import edu.ada.grupo5.movies_api.service.exception.ValidationErrorException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 
-//TODO : criar excecao personalizada
+//TODO : revisar excecao personalizada
 @Service
 public class TokenService {
 
@@ -31,7 +33,7 @@ public class TokenService {
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new ValidationErrorException("Token creation failed");
         }
     }
 
@@ -45,11 +47,22 @@ public class TokenService {
                     .getSubject();
 
         } catch (JWTVerificationException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new ValidationErrorException("Token validation failed");
         }
     }
 
     private Instant getExpirationDate() {
         return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public ResponseDTO<String> generateResponse(String token) {
+        if (token.isEmpty()) {
+            throw new ResourceNotFoundException("Token not found");
+        }
+        return ResponseDTO.<String>builder()
+                .message("Token generated sucessfully")
+                .timestamp(Instant.now())
+                .data(token)
+                .build();
     }
 }
