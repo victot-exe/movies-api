@@ -1,5 +1,6 @@
 package edu.ada.grupo5.movies_api.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,12 +13,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 //TODO : revisar/implementar mais configs de seguranca
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private SecurityFilter securityFilter;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -35,6 +40,7 @@ public class SecurityConfig {
                         //.requestMatchers(HttpMethod.POST, "/movies").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
         return http;
     }

@@ -2,7 +2,9 @@ package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.AuthLoginDTO;
 import edu.ada.grupo5.movies_api.dto.RegisterDTO;
+import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.model.User;
+import edu.ada.grupo5.movies_api.service.TokenService;
 import edu.ada.grupo5.movies_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+
 //TODO : refatorar metodos
 
 @RestController
@@ -27,15 +31,25 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private TokenService tokenService;
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthLoginDTO data) {
+    public ResponseEntity<ResponseDTO<String>> login(@RequestBody @Valid AuthLoginDTO data) {
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        ResponseDTO<String> response = ResponseDTO.<String>builder()
+                .message("Token generated sucessfully")
+                .timestamp(Instant.now())
+                .data(token)
+                .build();
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/register")
