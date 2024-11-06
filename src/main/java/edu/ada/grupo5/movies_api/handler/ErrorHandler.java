@@ -28,7 +28,7 @@ public class ErrorHandler {
     @ExceptionHandler(ValidationErrorException.class)
     public ResponseEntity<StandardError> validationError(Exception e, HttpServletRequest request) {
         String stringError = "Error validating";
-        HttpStatus status = HttpStatus.EXPECTATION_FAILED;
+        HttpStatus status = HttpStatus.FORBIDDEN;
         StandardError error = new StandardError(Instant.now(), status.value(), stringError, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(error);
     }
@@ -36,7 +36,7 @@ public class ErrorHandler {
     @ExceptionHandler(RegisterErrorException.class)
     public ResponseEntity<StandardError> registerError(Exception e, HttpServletRequest request) {
         String stringError = "Error on register";
-        HttpStatus status = HttpStatus.CONFLICT;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError error = new StandardError(Instant.now(), status.value(), stringError, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(error);
     }
