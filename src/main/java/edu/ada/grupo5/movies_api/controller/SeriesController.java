@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
+//TODO: revisar
 
 @RestController
 @RequestMapping("/tmdb/tv")
@@ -24,11 +24,7 @@ public class SeriesController {
     public ResponseEntity<ResponseDTO<ModelResponseGET<AiringTodayDTO>>> getAiringToday(@RequestParam(defaultValue = "en-US") String language,
                                                                                         @RequestParam(defaultValue = "1") String page) {
         ModelResponseGET<AiringTodayDTO> data = seriesService.getAiringToday(language, page);
-        ResponseDTO<ModelResponseGET<AiringTodayDTO>> response = ResponseDTO.<ModelResponseGET<AiringTodayDTO>>builder()
-                .message("Airing today fetched sucessfully")
-                .timestamp(Instant.now())
-                .data(data)
-                .build();
+        ResponseDTO<ModelResponseGET<AiringTodayDTO>> response = seriesService.getAiringTodayResponse(data);
         return ResponseEntity.ok(response);
     }
 }

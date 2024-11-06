@@ -8,7 +8,6 @@ import edu.ada.grupo5.movies_api.service.TokenService;
 import edu.ada.grupo5.movies_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-
-//TODO : refatorar metodos
+//TODO : revisar refatoramento metodos
 
 @RestController
 @RequestMapping("/auth")
@@ -43,11 +40,7 @@ public class AuthController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        ResponseDTO<String> response = ResponseDTO.<String>builder()
-                .message("Token generated sucessfully")
-                .timestamp(Instant.now())
-                .data(token)
-                .build();
+        ResponseDTO<String> response = tokenService.generateResponse(token);
 
         return ResponseEntity.ok().body(response);
     }
