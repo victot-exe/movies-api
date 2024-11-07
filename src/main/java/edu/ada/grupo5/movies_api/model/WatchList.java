@@ -15,11 +15,17 @@ public class WatchList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Movie movie;
-    private Serie serie;
+    private String tmdbId;
+    private String title;
+    @Enumerated(EnumType.STRING)
+    private MovieSerieEnum movieSerieEnum;
     @Enumerated(EnumType.STRING)
     private WatchListStatus watchListStatus;
 
-
+    public WatchList(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
+        this.tmdbId = tmdbId;
+        this.title = title;
+        this.movieSerieEnum = movieSerieEnum;
+        this.watchListStatus = watchListStatus;
+    }
 }

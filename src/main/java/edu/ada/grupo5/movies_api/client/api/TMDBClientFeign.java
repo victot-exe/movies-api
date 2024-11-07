@@ -1,5 +1,6 @@
 package edu.ada.grupo5.movies_api.client.api;
 
+import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

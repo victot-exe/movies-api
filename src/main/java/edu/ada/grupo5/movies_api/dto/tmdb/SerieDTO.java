@@ -7,4 +7,5 @@ public class SerieDTO {
 
     private String name;
     private String id;
+    private String imdbId;
 }

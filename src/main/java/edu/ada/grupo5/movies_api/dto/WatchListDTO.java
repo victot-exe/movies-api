@@ -1,9 +1,6 @@
 package edu.ada.grupo5.movies_api.dto;
 
-import edu.ada.grupo5.movies_api.model.Movie;
-import edu.ada.grupo5.movies_api.model.Serie;
-import edu.ada.grupo5.movies_api.model.WatchList;
-import edu.ada.grupo5.movies_api.model.WatchListStatus;
+import edu.ada.grupo5.movies_api.model.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -16,13 +13,15 @@ import lombok.NoArgsConstructor;
 @Schema
 public class WatchListDTO {
 
-    private Movie movie;
-    private Serie serie;
+    private String title;
+    private String tmdbId;
+    private MovieSerieEnum movieSerieEnum;
     private WatchListStatus watchListStatus;
 
     public WatchListDTO(WatchList watchList) {
-        this.movie = watchList.getMovie();
-        this.serie = watchList.getSerie();
+        this.title = watchList.getTitle();
+        this.tmdbId = watchList.getTmdbId();
+        this.movieSerieEnum = watchList.getMovieSerieEnum();
         this.watchListStatus = watchList.getWatchListStatus();
     }
 }
