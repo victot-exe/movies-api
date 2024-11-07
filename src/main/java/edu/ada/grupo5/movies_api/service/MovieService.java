@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class MovieService {
 
+    @Autowired
     private final TMDBClientFeign tmdbClientFeign;
 
     @Autowired

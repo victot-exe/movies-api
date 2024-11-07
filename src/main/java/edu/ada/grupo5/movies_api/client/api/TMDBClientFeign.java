@@ -30,6 +30,9 @@ public interface TMDBClientFeign {
                       @RequestParam("language") String language,
                       @RequestParam("page") String page);
 
-    @GetMapping("movie/{movie_id}/external_ids")
-    ModelResponseGET<MovieIdsDTO> getMovieIds(@PathVariable("movie_id") String tmdbID);
+    @GetMapping("/search/tv")
+    ModelResponseGET<SerieDTO> getSerie(@RequestParam("query") String serieName,
+                                        @RequestParam("include_adult") String includeAdult,
+                                        @RequestParam("language") String language,
+                                        @RequestParam("page") String page);
 }

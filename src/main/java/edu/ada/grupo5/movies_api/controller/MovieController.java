@@ -4,6 +4,7 @@ import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
+import edu.ada.grupo5.movies_api.service.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,7 @@ import java.util.List;
 public class MovieController {
 
     @Autowired
-    private final MovieService movieService;
-
-    @Autowired
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
-    }
+    private MovieService movieService;
 
     @GetMapping("/tmdb/trending/movies/{timeWindow}")
     public ResponseEntity<ResponseDTO<ModelResponseGET<TrendingMovieDTO>>> getTrendingMovies(
@@ -70,4 +66,6 @@ public class MovieController {
 
         return ResponseEntity.ok(response);
     }
+
+
 }
