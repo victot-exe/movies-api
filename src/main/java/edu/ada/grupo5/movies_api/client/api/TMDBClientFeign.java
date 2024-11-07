@@ -1,9 +1,12 @@
 package edu.ada.grupo5.movies_api.client.api;
 
+import edu.ada.grupo5.movies_api.dto.TVResult;
 import edu.ada.grupo5.movies_api.dto.tmdb.AiringTodayDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ModelResponseGET;
 import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieDTO;
+import edu.ada.grupo5.movies_api.model.BaseModel;
+import edu.ada.grupo5.movies_api.model.Serie;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,4 +29,9 @@ public interface TMDBClientFeign {
     @GetMapping("/tv/airing_today")
     ModelResponseGET<AiringTodayDTO> getAiringToday(@RequestParam("language") String language,
                                                     @RequestParam("page") String page);
+
+    @GetMapping("/find/{external_id}")
+    TVResult findSerieById(@PathVariable("external_id") String externalId,
+                           @RequestParam("external_source") String externalSource,
+                           @RequestParam("language") String language);
 }

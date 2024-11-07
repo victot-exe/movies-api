@@ -1,15 +1,14 @@
 package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
+import edu.ada.grupo5.movies_api.dto.TVResult;
 import edu.ada.grupo5.movies_api.dto.tmdb.AiringTodayDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ModelResponseGET;
+import edu.ada.grupo5.movies_api.model.Serie;
 import edu.ada.grupo5.movies_api.service.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
@@ -30,5 +29,12 @@ public class SeriesController {
                 .data(data)
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/find/{imdbId}")
+    public ResponseEntity<TVResult> getSerieById(@PathVariable("imdbId") String imdbId,
+                                               @RequestParam(defaultValue = "en-US") String language) {
+        TVResult data = seriesService.findSerieById(imdbId,language);
+        return ResponseEntity.ok(data);
     }
 }
