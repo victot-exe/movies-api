@@ -18,20 +18,5 @@ import java.util.List;
 @Builder
 //TODO : implementar modelo para o bd
 public class Serie extends BaseModel{
-    public String backdrop_path;
-    @JsonProperty("id")
-    public int showId;
-    public String name;
-    public String original_name;
-    public String overview;
-    public String poster_path;
-    public String media_type;
-    public boolean adult;
-    public String original_language;
-    public List<Integer> genre_ids;
-    public double popularity;
-    public String first_air_date;
-    public double vote_average;
-    public int vote_count;
-    public List<String> origin_country;
+    public String title;
 }
