@@ -21,4 +21,15 @@ public class StandardError implements Serializable {
     private String error;
     private String message;
     private String path;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "  \"timestamp\": " + "\"" + timestamp + "\",\n" +
+                "  \"status\": " + "\"" + status + "\",\n" +
+                "  \"error\": " + "\"" + error + "\",\n" +
+                "  \"message\": " + "\"" + message + "\",\n" +
+                "  \"path\": " + "\"" + path + "\"\n" +
+                "}";
+    }
 }

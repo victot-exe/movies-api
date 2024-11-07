@@ -5,9 +5,10 @@ import edu.ada.grupo5.movies_api.model.User;
 import edu.ada.grupo5.movies_api.service.exception.RegisterErrorException;
 import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 //TODO : criar tratamento de excecoes personalizado
