@@ -12,13 +12,12 @@ import lombok.*;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO: implementar/revisar
 public class Movie extends BaseModel {
     @Column(nullable = false)
     private String title;
     private String director;
     private String genre;
-    private Integer year;
+    private Integer releaseYear;
     private String country;
     private String language;
     private Integer duration;
