@@ -1,8 +1,6 @@
 package edu.ada.grupo5.movies_api.dto.tmdb;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data
