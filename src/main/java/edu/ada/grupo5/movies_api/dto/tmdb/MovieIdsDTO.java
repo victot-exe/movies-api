@@ -3,9 +3,10 @@ package edu.ada.grupo5.movies_api.dto.tmdb;
 import lombok.Data;
 
 @Data
-public class SerieDTO {
+public class MovieIdsDTO {
 
-    private String name;
     private String id;
-    private String imdbId;
+    private String imdb_id;
+
+
 }

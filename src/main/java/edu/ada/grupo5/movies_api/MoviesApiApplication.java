@@ -8,8 +8,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class MoviesApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MoviesApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MoviesApiApplication.class, args);
+    }
 
 }
