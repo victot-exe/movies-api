@@ -67,8 +67,8 @@ public class TokenService {
         }
     }
 
-    public void saveUserToken(User user) {
-        tokenRepository.save(generateToken(user));
+    public void saveUserToken(Token token) {
+        tokenRepository.save(token);
     }
 
     private Instant getExpirationDate() {

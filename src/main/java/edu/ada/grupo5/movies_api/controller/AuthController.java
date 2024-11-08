@@ -3,6 +3,8 @@ package edu.ada.grupo5.movies_api.controller;
 import edu.ada.grupo5.movies_api.dto.AuthLoginDTO;
 import edu.ada.grupo5.movies_api.dto.RegisterDTO;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
+import edu.ada.grupo5.movies_api.dto.UserDTO;
+import edu.ada.grupo5.movies_api.model.User;
 import edu.ada.grupo5.movies_api.service.LoginService;
 import edu.ada.grupo5.movies_api.service.LogoutService;
 import edu.ada.grupo5.movies_api.service.RegisterService;
@@ -35,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<String>> register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<ResponseDTO<String>> register(@RequestBody @Valid UserDTO data) {
         ResponseDTO<String> response = registerService.register(data);
         return ResponseEntity.ok(response);
     }

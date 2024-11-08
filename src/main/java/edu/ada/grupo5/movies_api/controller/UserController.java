@@ -20,6 +20,5 @@ public class UserController {
     @GetMapping(value = "/get-user/{login}")
     public ResponseEntity<UserDTO> getUserByLogin(@PathVariable("login") String login) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.findUserByLogin(login));
-
     }
 }

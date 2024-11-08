@@ -34,7 +34,8 @@ public class User implements UserDetails, Serializable{
     @OneToOne
     private Token token;
 
-    public User(String login, String password, UserRole role) {
+    public User(String name, String login, String password, UserRole role) {
+        this.name = name;
         this.login = login;
         this.password = password;
         this.role = role;
