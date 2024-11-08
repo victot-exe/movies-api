@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,6 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ResponseDTO<T> {
     private String message;
-    private LocalDateTime timestamp;
+    private Instant timestamp;
     private T data;
 }
