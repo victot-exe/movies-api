@@ -1,7 +1,7 @@
 package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
-import edu.ada.grupo5.movies_api.dto.tmdb.AiringTodayDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.SerieNameIdDTO;
 import edu.ada.grupo5.movies_api.service.SeriesService;
@@ -25,10 +25,10 @@ public class SeriesController {
     private SeriesService seriesService;
 
     @GetMapping("/airing_today")
-    public ResponseEntity<ResponseDTO<ResultResponseDTO<AiringTodayDTO>>> getAiringToday(@RequestParam(defaultValue = "en-US") String language,
+    public ResponseEntity<ResponseDTO<ResultResponseDTO<SerieDTO>>> getAiringToday(@RequestParam(defaultValue = "en-US") String language,
                                                                                          @RequestParam(defaultValue = "1") String page) {
-        ResultResponseDTO<AiringTodayDTO> data = seriesService.getAiringToday(language, page);
-        ResponseDTO<ResultResponseDTO<AiringTodayDTO>> response = seriesService.getAiringTodayResponse(data);
+        ResultResponseDTO<SerieDTO> data = seriesService.getAiringToday(language, page);
+        ResponseDTO<ResultResponseDTO<SerieDTO>> response = seriesService.getAiringTodayResponse(data);
         return ResponseEntity.ok(response);
     }
 

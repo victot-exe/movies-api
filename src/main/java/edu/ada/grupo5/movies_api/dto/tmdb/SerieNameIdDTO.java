@@ -6,9 +6,9 @@ import lombok.Data;
 public class SerieNameIdDTO {
 
     private String name;
-    private String id;
+    private Integer id;
 
-    public SerieNameIdDTO(String title, String tmdbId) {
+    public SerieNameIdDTO(String title, Integer tmdbId) {
         this.name = title;
         this.id = tmdbId;
     }

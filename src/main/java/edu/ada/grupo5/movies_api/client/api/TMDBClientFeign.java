@@ -21,7 +21,7 @@ public interface TMDBClientFeign {
     GenresResponseDTO getGenres(@RequestParam("language") String language);
 
     @GetMapping("/tv/airing_today")
-    ResultResponseDTO<AiringTodayDTO> getAiringToday(@RequestParam("language") String language,
+    ResultResponseDTO<SerieDTO> getAiringToday(@RequestParam("language") String language,
                                                      @RequestParam("page") String page);
 
     @GetMapping("/search/movie")
