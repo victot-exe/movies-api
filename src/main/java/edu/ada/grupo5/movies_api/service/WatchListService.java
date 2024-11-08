@@ -29,7 +29,13 @@ public class WatchListService {
     }
 
     @Transactional
-    public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum){
-        this.watchListRepository.deleteBytmdbIdAndmovieSerieEnum(tmdbId, movieSerieEnum);
+    public void updateWatchListStatus(String tmdbId, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
+        this.watchListRepository.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus);
     }
+
+    @Transactional
+    public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum){
+        this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum);
+    }
+
 }
