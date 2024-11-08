@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/movies")
-// TODO: estas rotas foram criadas para testar a integração com TMDB, provavelmente os métodos vão ser alterados
 public class MovieController {
 
     private final MovieService movieService;
