@@ -1,6 +1,7 @@
 package edu.ada.grupo5.movies_api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,10 @@ public class User implements UserDetails, Serializable{
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @JsonIgnore
+    @OneToOne
+    private Token token;
 
     public User(String login, String password, UserRole role) {
         this.login = login;

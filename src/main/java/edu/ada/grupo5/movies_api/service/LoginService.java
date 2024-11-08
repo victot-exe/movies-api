@@ -25,7 +25,7 @@ public class LoginService {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((User) auth.getPrincipal());
-            return tokenService.generateResponse(token);
+            return tokenService.generateResponse(token.getToken());
 
         } catch (Exception e) {
             throw new ValidationErrorException("Invalid username or password.");

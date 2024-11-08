@@ -4,6 +4,7 @@ import edu.ada.grupo5.movies_api.dto.AuthLoginDTO;
 import edu.ada.grupo5.movies_api.dto.RegisterDTO;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.service.LoginService;
+import edu.ada.grupo5.movies_api.service.LogoutService;
 import edu.ada.grupo5.movies_api.service.RegisterService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class AuthController {
     private LoginService loginService;
     @Autowired
     private RegisterService registerService;
+    @Autowired
+    private LogoutService logoutService;
 
 
     @PostMapping("/login")

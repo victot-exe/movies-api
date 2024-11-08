@@ -2,7 +2,6 @@ package edu.ada.grupo5.movies_api.security;
 
 import edu.ada.grupo5.movies_api.service.TokenService;
 import edu.ada.grupo5.movies_api.service.UserService;
-import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var login = tokenService.validateToken(token);
-            UserDetails userDetails = userService.findUserByLogin(login);
+            UserDetails userDetails = userService.findUserDetailsByLogin(login);
 
             var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

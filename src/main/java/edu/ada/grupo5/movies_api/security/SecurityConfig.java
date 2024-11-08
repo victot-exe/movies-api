@@ -1,5 +1,7 @@
 package edu.ada.grupo5.movies_api.security;
 
+import edu.ada.grupo5.movies_api.service.LogoutService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 //TODO : revisar/implementar mais configs de seguranca
 
@@ -23,6 +26,8 @@ public class SecurityConfig {
 
     @Autowired
     private SecurityFilter securityFilter;
+    @Autowired
+    private LogoutHandler logoutHandler;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -41,6 +46,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler(((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK)))
+                )
                 .build();
         return http;
     }
