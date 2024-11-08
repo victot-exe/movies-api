@@ -1,8 +1,6 @@
 package edu.ada.grupo5.movies_api.controller;
 
-import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
-import edu.ada.grupo5.movies_api.dto.tmdb.AiringTodayDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ModelResponseGET;
 import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieDTO;
@@ -12,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/movies")
