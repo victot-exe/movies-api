@@ -33,12 +33,9 @@ public class SeriesController {
     }
 
     @GetMapping("/search/serie")
-    public ResponseEntity<ResponseDTO<List<SerieNameIdDTO>>> getSerie(@RequestParam String serieName,
-                                                                      @RequestParam(defaultValue = "false") String includeAdult,
-                                                                      @RequestParam(defaultValue = "en-US") String language,
-                                                                      @RequestParam(defaultValue = "1") String page) {
+    public ResponseEntity<ResponseDTO<List<SerieNameIdDTO>>> getSerie(@RequestParam String serieName) {
 
-        List<SerieNameIdDTO> data = seriesService.getSerie(serieName, includeAdult, language, page);
+        List<SerieNameIdDTO> data = seriesService.getSerie(serieName);
 
         ResponseDTO<List<SerieNameIdDTO>> response = ResponseDTO.<List<SerieNameIdDTO>>builder()
                 .message("Series fetched successfully")

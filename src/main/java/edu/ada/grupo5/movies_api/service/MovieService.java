@@ -27,8 +27,8 @@ public class MovieService {
         return tmdbClientFeign.getGenres(language);
     }
 
-    public List<MovieTitleIdDTO> getMovie(String movieName, String includeAdult, String language, String page) {
-        ResultResponseDTO<MovieDTO> movieDTOResultResponseDTO = tmdbClientFeign.getMovie(movieName, includeAdult, language, page);
+    public List<MovieTitleIdDTO> getMovie(String movieName) {
+        ResultResponseDTO<MovieDTO> movieDTOResultResponseDTO = tmdbClientFeign.getMovie(movieName);
         return movieDTOResultResponseDTO.getResults().stream().map(movie -> new MovieTitleIdDTO(movie.getTitle(), movie.getId())).collect(Collectors.toList());
     }
 }

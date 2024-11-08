@@ -38,9 +38,9 @@ public class SeriesService {
     }
 
 
-    public List<SerieNameIdDTO> getSerie(String serieName, String includeAdult, String language, String page) {
+    public List<SerieNameIdDTO> getSerie(String serieName) {
 
-        ResultResponseDTO<SerieDTO> serieDTOResultResponseDTO = tmdbClientFeign.getSerie(serieName, includeAdult, language, page);
+        ResultResponseDTO<SerieDTO> serieDTOResultResponseDTO = tmdbClientFeign.getSerie(serieName);
         return serieDTOResultResponseDTO.getResults().stream().map(serie -> new SerieNameIdDTO(serie.getName(), serie.getId())).collect(Collectors.toList());
 
     }

@@ -25,14 +25,8 @@ public interface TMDBClientFeign {
                                                      @RequestParam("page") String page);
 
     @GetMapping("/search/movie")
-    ResultResponseDTO<MovieDTO> getMovie(@RequestParam("query") String movieName,
-                                         @RequestParam("include_adult") String includeAdult,
-                                         @RequestParam("language") String language,
-                                         @RequestParam("page") String page);
+    ResultResponseDTO<MovieDTO> getMovie(@RequestParam("query") String movieName);
 
     @GetMapping("/search/tv")
-    ResultResponseDTO<SerieDTO> getSerie(@RequestParam("query") String serieName,
-                                         @RequestParam("include_adult") String includeAdult,
-                                         @RequestParam("language") String language,
-                                         @RequestParam("page") String page);
+    ResultResponseDTO<SerieDTO> getSerie(@RequestParam("query") String serieName);
 }
