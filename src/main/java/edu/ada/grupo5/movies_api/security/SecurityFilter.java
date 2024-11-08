@@ -45,14 +45,14 @@ public class SecurityFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (ResourceNotFoundException e) {
-            var standardError = new StandardError().builder().timestamp(Instant.now())
+            var standardError = StandardError.builder().timestamp(Instant.now())
                     .status(HttpStatus.NOT_FOUND.value()).error("Resource not found")
                     .message(e.getMessage()).path(request.getRequestURI()).build();
             response.setStatus(HttpStatus.NOT_FOUND.value());
             response.setContentType("application/json");
             response.getWriter().write(standardError.toString());
         } catch (ValidationErrorException e) {
-            var standardError = new StandardError().builder().timestamp(Instant.now())
+            var standardError = StandardError.builder().timestamp(Instant.now())
                     .status(HttpStatus.FORBIDDEN.value()).error("Error validating")
                     .message(e.getMessage()).path(request.getRequestURI()).build();
             response.setStatus(HttpStatus.FORBIDDEN.value());

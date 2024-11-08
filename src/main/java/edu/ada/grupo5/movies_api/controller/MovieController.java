@@ -1,6 +1,8 @@
 package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +50,9 @@ public class MovieController {
 
     @GetMapping("/search/movie")
     public ResponseEntity<ResponseDTO<List<MovieTitleIdDTO>>> getMovie(@RequestParam String movieName,
-                                                          @RequestParam(defaultValue = "false") String includeAdult,
-                                                          @RequestParam(defaultValue = "en-US") String language,
-                                                          @RequestParam(defaultValue = "1") String page) {
+                                                                       @RequestParam(defaultValue = "false") String includeAdult,
+                                                                       @RequestParam(defaultValue = "en-US") String language,
+                                                                       @RequestParam(defaultValue = "1") String page) {
 
         List<MovieTitleIdDTO> data = movieService.getMovie(movieName, includeAdult, language, page);
 
