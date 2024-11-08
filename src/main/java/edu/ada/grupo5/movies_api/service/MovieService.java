@@ -19,7 +19,7 @@ public class MovieService {
         this.tmdbClientFeign = tmdbClientFeign;
     }
 
-    public ModelResponseGET<TrendingMovieDTO> getTrendingMovies(String timeWindow, String language) {
+    public ResultResponseDTO<TrendingMovieDTO> getTrendingMovies(String timeWindow, String language) {
         return tmdbClientFeign.getTrendingMovies(timeWindow, language);
     }
 
@@ -28,7 +28,7 @@ public class MovieService {
     }
 
     public List<MovieTitleIdDTO> getMovie(String movieName, String includeAdult, String language, String page) {
-        ModelResponseGET<MovieDTO> movieDTOModelResponseGET = tmdbClientFeign.getMovie(movieName, includeAdult, language, page);
-        return movieDTOModelResponseGET.getResults().stream().map(movie -> new MovieTitleIdDTO(movie.getTitle(), movie.getId())).collect(Collectors.toList());
+        ResultResponseDTO<MovieDTO> movieDTOResultResponseDTO = tmdbClientFeign.getMovie(movieName, includeAdult, language, page);
+        return movieDTOResultResponseDTO.getResults().stream().map(movie -> new MovieTitleIdDTO(movie.getTitle(), movie.getId())).collect(Collectors.toList());
     }
 }

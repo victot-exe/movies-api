@@ -1,16 +1,13 @@
 package edu.ada.grupo5.movies_api.controller;
 
-import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
-import edu.ada.grupo5.movies_api.service.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,13 +18,13 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping("/tmdb/trending/movies/{timeWindow}")
-    public ResponseEntity<ResponseDTO<ModelResponseGET<TrendingMovieDTO>>> getTrendingMovies(
+    public ResponseEntity<ResponseDTO<ResultResponseDTO<TrendingMovieDTO>>> getTrendingMovies(
             @PathVariable String timeWindow,
             @RequestParam(defaultValue = "en-US") String language) {
 
-        ModelResponseGET<TrendingMovieDTO> data = movieService.getTrendingMovies(timeWindow, language);
+        ResultResponseDTO<TrendingMovieDTO> data = movieService.getTrendingMovies(timeWindow, language);
 
-        ResponseDTO<ModelResponseGET<TrendingMovieDTO>> response = ResponseDTO.<ModelResponseGET<TrendingMovieDTO>>builder()
+        ResponseDTO<ResultResponseDTO<TrendingMovieDTO>> response = ResponseDTO.<ResultResponseDTO<TrendingMovieDTO>>builder()
                 .message("Trending movies fetched successfully")
                 .timestamp(Instant.now())
                 .data(data)
