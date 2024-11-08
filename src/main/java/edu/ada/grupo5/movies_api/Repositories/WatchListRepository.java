@@ -7,12 +7,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface WatchListRepository extends JpaRepository<WatchList, Long> {
-    @Modifying
-    @Query("DELETE FROM WatchList w WHERE w.tmdbId = ?1 AND w.movieSerieEnum = ?2")
-    void deleteByTmdbIdAndMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum);
+
+    List<WatchList> findAllByUserId(String userId);
 
     @Modifying
-    @Query("UPDATE WatchList w SET w.watchListStatus = ?3 WHERE w.tmdbId = ?1 AND w.movieSerieEnum = ?2")
-    void updateWatchListStatus(String tmdbId, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus);
+    @Query("DELETE FROM WatchList w WHERE w.tmdbId = ?1 AND w.movieSerieEnum = ?2 AND w.userId = ?3")
+    void deleteByTmdbIdAndMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum, String userId);
+
+    @Modifying
+    @Query("UPDATE WatchList w SET w.watchListStatus = ?3 WHERE w.tmdbId = ?1 AND w.movieSerieEnum = ?2 AND w.userId = ?4")
+    void updateWatchListStatus(String tmdbId, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus, String userId);
+
 }
