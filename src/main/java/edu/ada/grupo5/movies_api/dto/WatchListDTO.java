@@ -1,8 +1,9 @@
 package edu.ada.grupo5.movies_api.dto;
 
-import edu.ada.grupo5.movies_api.model.*;
+import edu.ada.grupo5.movies_api.model.MovieSerieEnum;
+import edu.ada.grupo5.movies_api.model.WatchList;
+import edu.ada.grupo5.movies_api.model.WatchListStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

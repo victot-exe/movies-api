@@ -2,8 +2,9 @@ package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.MovieTitleIdDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieDTO;
-import edu.ada.grupo5.movies_api.dto.tmdb.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

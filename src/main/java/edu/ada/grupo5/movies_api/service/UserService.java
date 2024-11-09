@@ -5,13 +5,11 @@ import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.model.User;
 import edu.ada.grupo5.movies_api.service.exception.RegisterErrorException;
 import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
-import edu.ada.grupo5.movies_api.service.exception.ValidationErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Optional;
 
 
 //TODO : criar tratamento de excecoes personalizado

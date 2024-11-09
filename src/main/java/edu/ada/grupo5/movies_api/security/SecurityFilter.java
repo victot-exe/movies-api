@@ -1,7 +1,5 @@
 package edu.ada.grupo5.movies_api.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ada.grupo5.movies_api.model.exception.StandardError;
 import edu.ada.grupo5.movies_api.service.TokenService;
 import edu.ada.grupo5.movies_api.service.UserService;
