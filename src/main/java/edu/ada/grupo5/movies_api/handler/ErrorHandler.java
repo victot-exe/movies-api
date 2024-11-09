@@ -18,7 +18,7 @@ public class ErrorHandler {
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<StandardError> resourceNotFound(Exception e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
         String stringError = "Resource not found";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError error = new StandardError(Instant.now(), status.value(), stringError, e.getMessage(), request.getRequestURI());
@@ -26,7 +26,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ValidationErrorException.class)
-    public ResponseEntity<StandardError> validationError(Exception e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> validationError(ValidationErrorException e, HttpServletRequest request) {
         String stringError = "Error validating";
         HttpStatus status = HttpStatus.FORBIDDEN;
         StandardError error = new StandardError(Instant.now(), status.value(), stringError, e.getMessage(), request.getRequestURI());
@@ -34,7 +34,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(RegisterErrorException.class)
-    public ResponseEntity<StandardError> registerError(Exception e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> registerError(RegisterErrorException e, HttpServletRequest request) {
         String stringError = "Error on register";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError error = new StandardError(Instant.now(), status.value(), stringError, e.getMessage(), request.getRequestURI());

@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ModelResponseGET<T> {
+public class ResultResponseDTO<T> {
     private int page;
     private List<T> results;
     @JsonProperty("total_pages")

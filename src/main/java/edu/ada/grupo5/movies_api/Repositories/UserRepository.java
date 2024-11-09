@@ -13,8 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends JpaRepository<User, String> {
 
     UserDetails findByLogin(String login);
+
     User findUserByLogin(String login);
+
     boolean existsBylogin(String login);
+
+    boolean existsById(Integer id);
 
     @Modifying
     @Transactional

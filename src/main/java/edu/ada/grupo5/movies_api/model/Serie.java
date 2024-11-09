@@ -1,10 +1,10 @@
 package edu.ada.grupo5.movies_api.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "series")

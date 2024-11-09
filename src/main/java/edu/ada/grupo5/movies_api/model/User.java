@@ -2,13 +2,18 @@ package edu.ada.grupo5.movies_api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +38,12 @@ public class User implements UserDetails, Serializable{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "token_id")
     private Token token;
+
+    @CreatedDate
+    @Column(updatable = false)
+    @JsonProperty("created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
 
     public User(String name, String login, String password, UserRole role) {
         this.name = name;
