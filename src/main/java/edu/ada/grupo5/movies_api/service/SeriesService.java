@@ -39,13 +39,6 @@ public class SeriesService {
     }
 
 
-    public List<SerieDTO> getSerie(String serieName, String includeAdult, String language, String page) {
-
-        ResultResponseDTO<SerieDTO> serieDTOResultResponseDTO = tmdbClientFeign.getSerie(serieName, includeAdult, language, page);
-        return serieDTOResultResponseDTO.getResults();
-
-    }
-
     public ResponseDTO<SerieDTO> searchSerie(Integer imdbId, String appendToResponse, String language) {
         SerieDTO dto = tmdbClientFeign.searchSerieById(imdbId, appendToResponse, language);
         return ResponseDTO.<SerieDTO>builder().message("Serie found")
@@ -69,6 +62,12 @@ public class SeriesService {
         return new Serie(dto.getName(), dto.getId(),
                 dto.isAdult(), dto.getOriginal_language(),
                 dto.getOriginal_name(), dto.getFirst_air_date(), dto.getVote_average());
+    }
+
+    public List<SerieDTO> getSerie(String serieName) {
+
+        ResultResponseDTO<SerieDTO> serieDTOResultResponseDTO = tmdbClientFeign.getSerie(serieName);
+        return serieDTOResultResponseDTO.getResults();
     }
 
     public void saveSerieBySearch(Integer id) {

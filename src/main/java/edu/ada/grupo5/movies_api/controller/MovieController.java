@@ -50,12 +50,9 @@ public class MovieController {
     }
 
     @GetMapping("/search/movie")
-    public ResponseEntity<ResponseDTO<List<MovieTitleIdDTO>>> getMovie(@RequestParam String movieName,
-                                                                       @RequestParam(defaultValue = "false") String includeAdult,
-                                                                       @RequestParam(defaultValue = "en-US") String language,
-                                                                       @RequestParam(defaultValue = "1") String page) {
+    public ResponseEntity<ResponseDTO<List<MovieTitleIdDTO>>> getMovie(@RequestParam String movieName) {
 
-        List<MovieTitleIdDTO> data = movieService.getMovie(movieName, includeAdult, language, page);
+        List<MovieTitleIdDTO> data = movieService.getMovie(movieName);
 
         ResponseDTO<List<MovieTitleIdDTO>> response = ResponseDTO.<List<MovieTitleIdDTO>>builder()
                 .message("Movies fetched successfully")

@@ -29,10 +29,7 @@ public class SeriesController {
     }
 
     @GetMapping("/search/serie")
-    public ResponseEntity<ResponseDTO<List<SerieDTO>>> getSerie(@RequestParam String serieName,
-                                                                @RequestParam(defaultValue = "false") String includeAdult,
-                                                                @RequestParam(defaultValue = "en-US") String language,
-                                                                @RequestParam(defaultValue = "1") String page) {
+    public ResponseEntity<ResponseDTO<List<SerieDTO>>> getSerie(@RequestParam String serieName) {
 
         List<SerieDTO> data = seriesService.getSerie(serieName, includeAdult, language, page);
 
