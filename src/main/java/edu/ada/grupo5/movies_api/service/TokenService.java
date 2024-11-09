@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import edu.ada.grupo5.movies_api.Repositories.TokenRepository;
+import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.model.Token;
 import edu.ada.grupo5.movies_api.model.TokenType;
@@ -30,6 +31,8 @@ public class TokenService {
 
     @Value("${tmdb.api.secret}")
     private String secret;
+    @Autowired
+    private UserRepository userRepository;
 
     public TokenService(TokenRepository tokenRepository) {
         this.tokenRepository = tokenRepository;
@@ -55,7 +58,7 @@ public class TokenService {
         }
     }
 
-    public String validateToken(String token) {
+    public String isTokenValid(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
@@ -86,4 +89,16 @@ public class TokenService {
                 .data(token)
                 .build();
     }
+
+    public void invalidateToken(String jwtToken) {
+        // Assuming JWT token is stored in a table and linked to a user via a foreign key
+        Token jwt = tokenRepository.findByToken(jwtToken);
+        User user = userRepository.findUserByToken(tokenRepository.findByToken(jwtToken));
+        if (jwt != null) {
+            user.setToken(null);
+            userRepository.save(user);
+            tokenRepository.delete(jwt);  // Or mark it as invalid
+        }
+    }
+
 }

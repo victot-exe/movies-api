@@ -1,7 +1,5 @@
 package edu.ada.grupo5.movies_api.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ada.grupo5.movies_api.model.exception.StandardError;
 import edu.ada.grupo5.movies_api.service.TokenService;
 import edu.ada.grupo5.movies_api.service.UserService;
@@ -36,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         try {
             var token = this.recoverToken(request);
             if (token != null) {
-                var login = tokenService.validateToken(token);
+                var login = tokenService.isTokenValid(token);
                 UserDetails userDetails = userService.findUserDetailsByLogin(login);
 
                 var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

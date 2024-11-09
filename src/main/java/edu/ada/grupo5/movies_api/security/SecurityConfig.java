@@ -1,6 +1,6 @@
 package edu.ada.grupo5.movies_api.security;
 
-import edu.ada.grupo5.movies_api.service.LogoutService;
+import edu.ada.grupo5.movies_api.service.TokenService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +28,8 @@ public class SecurityConfig {
     private SecurityFilter securityFilter;
     @Autowired
     private LogoutHandler logoutHandler;
+    @Autowired
+    private TokenService tokenService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -50,9 +52,18 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .addLogoutHandler(logoutHandler)
-                        .logoutSuccessHandler(((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK)))
+                        .logoutUrl("/auth/logout")  // URL to trigger logout
+                        .addLogoutHandler((request, response, authentication) -> {
+                            String authHeader = request.getHeader("Authorization");
+                            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                                String jwtToken = authHeader.substring(7);
+                                tokenService.invalidateToken(jwtToken);
+                            }
+                        })
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            // Optionally handle success, e.g., return a status code
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        })
                 )
                 .build();
         return http;
