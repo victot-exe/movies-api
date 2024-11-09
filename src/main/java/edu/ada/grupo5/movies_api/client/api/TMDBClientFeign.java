@@ -22,7 +22,7 @@ public interface TMDBClientFeign {
 
     @GetMapping("/tv/airing_today")
     ResultResponseDTO<SerieDTO> getAiringToday(@RequestParam("language") String language,
-                                                     @RequestParam("page") String page);
+                                               @RequestParam("page") String page);
 
     @GetMapping("/search/movie")
     ResultResponseDTO<MovieDTO> getMovie(@RequestParam("query") String movieName,
@@ -35,4 +35,9 @@ public interface TMDBClientFeign {
                                          @RequestParam("include_adult") String includeAdult,
                                          @RequestParam("language") String language,
                                          @RequestParam("page") String page);
+
+    @GetMapping("/tv/{series_id}")
+    SerieDTO searchSerieById(@PathVariable("series_id") Integer imdbId,
+                             @RequestParam("append_to_response") String appendToResponse,
+                             @RequestParam("language") String language);
 }

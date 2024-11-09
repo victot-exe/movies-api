@@ -5,15 +5,12 @@ import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
-import edu.ada.grupo5.movies_api.dto.tmdb.SerieNameIdDTO;
 import edu.ada.grupo5.movies_api.model.Serie;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 //TODO: implementar restante que serao utilizados nas rotas e excecoes
 @Service
@@ -42,11 +39,19 @@ public class SeriesService {
     }
 
 
-    public List<SerieNameIdDTO> getSerie(String serieName, String includeAdult, String language, String page) {
+    public List<SerieDTO> getSerie(String serieName, String includeAdult, String language, String page) {
 
         ResultResponseDTO<SerieDTO> serieDTOResultResponseDTO = tmdbClientFeign.getSerie(serieName, includeAdult, language, page);
-        return serieDTOResultResponseDTO.getResults().stream().map(serie -> new SerieNameIdDTO(serie.getName(), serie.getId())).collect(Collectors.toList());
+        return serieDTOResultResponseDTO.getResults();
 
+    }
+
+    public ResponseDTO<SerieDTO> searchSerie(Integer imdbId, String appendToResponse, String language) {
+        SerieDTO dto = tmdbClientFeign.searchSerieById(imdbId, appendToResponse, language);
+        return ResponseDTO.<SerieDTO>builder().message("Serie found")
+                .timestamp(Instant.now())
+                .data(dto)
+                .build();
     }
 
     public ResponseDTO<SerieDTO> save(SerieDTO dto) {
@@ -58,11 +63,18 @@ public class SeriesService {
                 .build();
     }
 
-    @Transactional
+
     public Serie convertFromDTO(SerieDTO dto) {
         if (serieRepository.existsByTmdbId(dto.getId())) throw new RuntimeException();
         return new Serie(dto.getName(), dto.getId(),
                 dto.isAdult(), dto.getOriginal_language(),
                 dto.getOriginal_name(), dto.getFirst_air_date(), dto.getVote_average());
+    }
+
+    public void saveSerieBySearch(Integer id) {
+        if (!serieRepository.existsByTmdbId(id)) {
+            SerieDTO dto = tmdbClientFeign.searchSerieById(id, "", "en-US");
+            serieRepository.save(convertFromDTO(dto));
+        }
     }
 }

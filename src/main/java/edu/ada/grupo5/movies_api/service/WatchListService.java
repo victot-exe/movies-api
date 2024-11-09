@@ -19,9 +19,13 @@ public class WatchListService {
 
     @Autowired
     private WatchListRepository watchListRepository;
+    @Autowired
+    private SeriesService seriesService;
 
     public void save(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
         WatchList watchList = new WatchList(tmdbId, title, movieSerieEnum, watchListStatus);
+
+        seriesService.saveSerieBySearch(Integer.parseInt(tmdbId));
 
         String userId = getActiveUserId();
         watchList.setUserId(userId);
