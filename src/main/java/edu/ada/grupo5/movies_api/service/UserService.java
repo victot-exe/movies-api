@@ -31,7 +31,7 @@ public class UserService {
 
     public UserDTO findUserDTOByLogin(String login){
         User user = userRepository.findUserByLogin(login);
-        return new UserDTO(user.getId(), user.getName(), user.getLogin(), user.getPassword(),user.getRole(), user.getToken());
+        return new UserDTO(user.getId(), user.getName(), user.getLogin(), user.getPassword(),user.getRole());
     }
 
     public User save(User user) {

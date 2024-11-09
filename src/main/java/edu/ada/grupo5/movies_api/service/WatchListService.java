@@ -43,15 +43,11 @@ public class WatchListService {
         this.watchListRepository.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus, userId);
     }
 
-    @Transactional
-    public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum){
-        Integer userId = getActiveUserId();
     public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum) {
         Integer userId = getActiveUserId();
         this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
     }
 
-    public Integer getActiveUserId(){
     public Integer getActiveUserId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getId();
