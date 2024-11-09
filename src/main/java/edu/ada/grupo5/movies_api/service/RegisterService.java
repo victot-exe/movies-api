@@ -23,7 +23,12 @@ public class RegisterService {
     public ResponseDTO<String> register(UserDTO data) {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User user = new User(data.name(), data.login(), encryptedPassword, data.role());
+        userService.save(user);
         Token token = tokenService.generateToken(user);
+        user.setToken(token);
+        tokenService.saveUserToken(token);
+        userService.updateToken(user.getId(), token);
+
         return ResponseDTO.<String>builder()
                 .message("Account created successfully")
                 .timestamp(Instant.now())

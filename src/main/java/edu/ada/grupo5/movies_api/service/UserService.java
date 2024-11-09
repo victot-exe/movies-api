@@ -2,6 +2,7 @@ package edu.ada.grupo5.movies_api.service;
 
 import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.dto.UserDTO;
+import edu.ada.grupo5.movies_api.model.Token;
 import edu.ada.grupo5.movies_api.model.User;
 import edu.ada.grupo5.movies_api.service.exception.RegisterErrorException;
 import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
@@ -39,4 +40,9 @@ public class UserService {
         }
         return userRepository.save(user);
     }
+
+    public void updateToken(Integer userId, Token token) {
+        userRepository.updateToken(userId, token);
+    }
+
 }

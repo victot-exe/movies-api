@@ -22,16 +22,16 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails, Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue
+    private Integer id;
     private String name;
     private String login;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @JsonIgnore
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "token_id")
     private Token token;
 
     public User(String name, String login, String password, UserRole role) {
