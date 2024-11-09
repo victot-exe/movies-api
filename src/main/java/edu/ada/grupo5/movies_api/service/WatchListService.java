@@ -1,7 +1,6 @@
 package edu.ada.grupo5.movies_api.service;
 
 import edu.ada.grupo5.movies_api.Repositories.WatchListRepository;
-import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
 import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.model.MovieSerieEnum;
 import edu.ada.grupo5.movies_api.model.User;
@@ -20,10 +19,13 @@ public class WatchListService {
 
     @Autowired
     private WatchListRepository watchListRepository;
+    @Autowired
+    private SeriesService seriesService;
 
-    public void save(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus){
+    public void save(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
         WatchList watchList = new WatchList(tmdbId, title, movieSerieEnum, watchListStatus);
 
+        seriesService.saveSerieBySearch(Integer.parseInt(tmdbId));
         Integer userId = getActiveUserId();
         watchList.setUserId(userId);
 
@@ -44,10 +46,13 @@ public class WatchListService {
     @Transactional
     public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum){
         Integer userId = getActiveUserId();
+    public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum) {
+        Integer userId = getActiveUserId();
         this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
     }
 
     public Integer getActiveUserId(){
+    public Integer getActiveUserId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getId();
     }

@@ -17,8 +17,12 @@ import java.io.Serializable;
 public class Serie extends BaseModel implements Serializable {
 
     private String title;
-    private String imdbId;
-    private String tmdbId;
+    private int tmdbId;
+    public boolean adult;
+    public String original_language;
+    public String original_name;
+    public String first_air_date;
+    public double vote_average;
 
 
 }

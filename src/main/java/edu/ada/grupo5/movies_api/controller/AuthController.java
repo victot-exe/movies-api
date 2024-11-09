@@ -1,10 +1,8 @@
 package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.AuthLoginDTO;
-import edu.ada.grupo5.movies_api.dto.RegisterDTO;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.UserDTO;
-import edu.ada.grupo5.movies_api.model.User;
 import edu.ada.grupo5.movies_api.service.LoginService;
 import edu.ada.grupo5.movies_api.service.LogoutService;
 import edu.ada.grupo5.movies_api.service.RegisterService;

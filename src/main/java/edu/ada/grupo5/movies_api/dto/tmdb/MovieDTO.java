@@ -1,8 +1,5 @@
 package edu.ada.grupo5.movies_api.dto.tmdb;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data

@@ -32,21 +32,21 @@ public class WatchListController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<WatchListDTO> getAll(){
+    public List<WatchListDTO> getAll() {
         return this.watchListService.getAll();
     }
 
     @PutMapping("/{tmdbId}")
     public ResponseEntity<Void> updateWatchListStatus(@PathVariable("tmdbId") String tmdbId,
                                                       @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum,
-                                                      @RequestParam("watchListStatus") WatchListStatus watchListStatus){
+                                                      @RequestParam("watchListStatus") WatchListStatus watchListStatus) {
         this.watchListService.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{tmdbId}")
     public ResponseEntity<Void> deleteByTmdbIdAndByMovieSerieEnum(@PathVariable("tmdbId") String tmdbId,
-                                                                  @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum){
+                                                                  @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum) {
         this.watchListService.deleteByTmdbIdAndByMovieSerieEnum(tmdbId, movieSerieEnum);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
