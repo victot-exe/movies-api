@@ -84,12 +84,12 @@ public class WatchListService {
     }
 
 
-    //recomendaçao DE fILME por genero buscando no TMDB.
+    //recomendaçao de filme (watched) por genero buscando no TMDB.
     public List<RecommendedMovieDTO> getGenreBasedRecommendations() {
         String userId = getActiveUserId();
 
         List<WatchList> favoriteItems = watchListRepository.findAllByUserId(userId).stream()
-                .filter(item -> item.getWatchListStatus() == WatchListStatus.WATCHED)
+                .filter(item -> item.getWatchListStatus() == WatchListStatus.WATCHED|| item.getWatchListStatus() == WatchListStatus.WATCHING)
                 .collect(Collectors.toList());
 
         Map<Integer, Long> genreCounts = favoriteItems.stream()
