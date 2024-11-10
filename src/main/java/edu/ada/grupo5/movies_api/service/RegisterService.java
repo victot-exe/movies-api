@@ -1,6 +1,5 @@
 package edu.ada.grupo5.movies_api.service;
 
-import edu.ada.grupo5.movies_api.dto.RegisterDTO;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.UserDTO;
 import edu.ada.grupo5.movies_api.model.Token;
@@ -25,9 +24,7 @@ public class RegisterService {
         User user = new User(data.name(), data.login(), encryptedPassword, data.role());
         userService.save(user);
         Token token = tokenService.generateToken(user);
-        user.setToken(token);
-        tokenService.saveUserToken(token);
-        userService.updateToken(user.getId(), token);
+        userService.updateToken(user, token);
 
         return ResponseDTO.<String>builder()
                 .message("Account created successfully")

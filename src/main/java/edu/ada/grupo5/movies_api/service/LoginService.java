@@ -1,5 +1,7 @@
 package edu.ada.grupo5.movies_api.service;
 
+import edu.ada.grupo5.movies_api.Repositories.TokenRepository;
+import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.dto.AuthLoginDTO;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.model.User;
@@ -13,18 +15,21 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private UserService userService;
 
     public ResponseDTO<String> login(AuthLoginDTO data) {
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((User) auth.getPrincipal());
+            User user = userService.findUserByLogin(data.login());
+            tokenService.invalidateToken(user.getToken().getToken());
+            userService.updateToken(user, token);
             return tokenService.generateResponse(token.getToken());
-
         } catch (Exception e) {
             throw new ValidationErrorException("Invalid username or password.");
         }

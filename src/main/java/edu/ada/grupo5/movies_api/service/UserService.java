@@ -1,5 +1,6 @@
 package edu.ada.grupo5.movies_api.service;
 
+import edu.ada.grupo5.movies_api.Repositories.TokenRepository;
 import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.UserDTO;
@@ -20,6 +21,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
 
     public UserDetails findUserDetailsByLogin(String login) {
         UserDetails userDetails = userRepository.findByLogin(login);
@@ -53,8 +56,15 @@ public class UserService {
                 .build();
     }
 
-    public void updateToken(Integer userId, Token token) {
-        userRepository.updateToken(userId, token);
+    public void updateToken(User user, Token token) {
+            user.setToken(token);
+            tokenRepository.save(token);
+            userRepository.updateToken(user.getId(), token);
     }
+
+    public User findUserByLogin(String login) {
+        return userRepository.findUserByLogin(login);
+    };
+
 
 }

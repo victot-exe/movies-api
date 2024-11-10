@@ -20,8 +20,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     boolean existsBylogin(String login);
 
-    boolean existsById(Integer id);
-
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.token = :token WHERE u.id = :userId")

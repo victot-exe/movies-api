@@ -59,21 +59,22 @@ public class TokenService {
     }
 
     public String isTokenValid(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("movies-api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (JWTVerificationException e) {
-            throw new ValidationErrorException("Token validation failed");
+        if (tokenRepository.findByToken(token) != null) {
+            try {
+                Algorithm algorithm = Algorithm.HMAC256(secret);
+                return JWT.require(algorithm)
+                        .withIssuer("movies-api")
+                        .build()
+                        .verify(token)
+                        .getSubject();
+
+            } catch (JWTVerificationException e) {
+                throw new ValidationErrorException("Token validation failed");
+            }
         }
+        throw new ResourceNotFoundException("Token not found");
     }
 
-    public void saveUserToken(Token token) {
-        tokenRepository.save(token);
-    }
 
     private Instant getExpirationDate() {
         return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
@@ -84,20 +85,19 @@ public class TokenService {
             throw new ResourceNotFoundException("Token not found");
         }
         return ResponseDTO.<String>builder()
-                .message("Token generated sucessfully")
+                .message("Token generated successfully")
                 .timestamp(Instant.now())
                 .data(token)
                 .build();
     }
 
-    public void invalidateToken(String jwtToken) {
-        // Assuming JWT token is stored in a table and linked to a user via a foreign key
-        Token jwt = tokenRepository.findByToken(jwtToken);
-        User user = userRepository.findUserByToken(tokenRepository.findByToken(jwtToken));
+    public void invalidateToken(String token) {
+        Token jwt = tokenRepository.findByToken(token);
+        User user = userRepository.findUserByToken(tokenRepository.findByToken(token));
         if (jwt != null) {
             user.setToken(null);
             userRepository.save(user);
-            tokenRepository.delete(jwt);  // Or mark it as invalid
+            tokenRepository.delete(jwt);
         }
     }
 

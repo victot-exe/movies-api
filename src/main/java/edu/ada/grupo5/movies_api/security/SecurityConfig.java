@@ -10,13 +10,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
+
 
 //TODO : revisar/implementar mais configs de seguranca
 
@@ -27,14 +29,12 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
     @Autowired
-    private LogoutHandler logoutHandler;
-    @Autowired
     private TokenService tokenService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        SecurityFilterChain http = httpSecurity
-                .csrf(csrf -> csrf.disable())
+        DefaultSecurityFilterChain build = httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")  // URL to trigger logout
+                        .logoutUrl("/auth/logout")
                         .addLogoutHandler((request, response, authentication) -> {
                             String authHeader = request.getHeader("Authorization");
                             if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -56,13 +56,12 @@ public class SecurityConfig {
                             }
                         })
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            // Optionally handle success, e.g., return a status code
                             response.setStatus(HttpServletResponse.SC_OK);
                         })
                 )
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .build();
-        return http;
+        return build;
     }
 
     @Bean

@@ -11,17 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LogoutService  implements LogoutHandler {
-
-    @Autowired
-    TokenService tokenService;
-
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        // Extract the JWT token from the Authorization header
         String token = request.getHeader("Authorization");
 
         if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // Remove "Bearer " prefix
+            token = token.substring(7);
 
             System.out.println("Token has been blacklisted: " + token);
         }
