@@ -1,7 +1,5 @@
 package edu.ada.grupo5.movies_api.service;
 
-import edu.ada.grupo5.movies_api.Repositories.TokenRepository;
-import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.dto.AuthLoginDTO;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.model.User;
