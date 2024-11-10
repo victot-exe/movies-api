@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import lombok.Data;
+import lombok.Getter;
 
+import java.util.List;
+@Getter
 @Data
 public class MovieDTO {
 
@@ -17,6 +20,9 @@ public class MovieDTO {
     private Integer duration;
     private Integer Id;
     private String imdbId;
+
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
 
 
 }

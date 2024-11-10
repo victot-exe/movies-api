@@ -21,4 +21,8 @@ public interface WatchListRepository extends JpaRepository<WatchList, Long> {
     @Query("UPDATE WatchList w SET w.watchListStatus = ?3 WHERE w.tmdbId = ?1 AND w.movieSerieEnum = ?2 AND w.userId = ?4")
     void updateWatchListStatus(String tmdbId, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus, String userId);
 
+    @Query("SELECT w FROM WatchList w WHERE w.favorite = true")
+    List<WatchList> findAllFavorites();
+
+    WatchList findByTmdbIdAndUserId(String tmdbId, String userId);
 }

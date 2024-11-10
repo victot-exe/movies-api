@@ -15,18 +15,21 @@ public interface TMDBClientFeign {
 
     @GetMapping("/trending/movie/{timeWindow}")
     ResultResponseDTO<TrendingMovieDTO> getTrendingMovies(@PathVariable("timeWindow") String timeWindow,
-                                                          @RequestParam("language") String language);
+        @RequestParam("language") String language);
 
     @GetMapping("/genre/movie/list")
     GenresResponseDTO getGenres(@RequestParam("language") String language);
 
     @GetMapping("/tv/airing_today")
     ResultResponseDTO<AiringTodayDTO> getAiringToday(@RequestParam("language") String language,
-                                                     @RequestParam("page") String page);
+        @RequestParam("page") String page);
 
     @GetMapping("/search/movie")
     ResultResponseDTO<MovieDTO> getMovie(@RequestParam("query") String movieName);
 
     @GetMapping("/search/tv")
     ResultResponseDTO<SerieDTO> getSerie(@RequestParam("query") String serieName);
+
+    @GetMapping("/discover/movie")
+    ResultResponseDTO<MovieDTO> getMoviesByGenre(@RequestParam("with_genres") String genre);
 }

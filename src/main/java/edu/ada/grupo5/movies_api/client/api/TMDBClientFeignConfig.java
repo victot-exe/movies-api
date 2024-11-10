@@ -17,4 +17,5 @@ public class TMDBClientFeignConfig {
             requestTemplate.header("Authorization", "Bearer " + apiToken);
         };
     }
+
 }

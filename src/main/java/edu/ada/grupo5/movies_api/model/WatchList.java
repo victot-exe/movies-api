@@ -25,12 +25,21 @@ public class WatchList {
     @Enumerated(EnumType.STRING)
     private WatchListStatus watchListStatus;
     private String userId;
+    private boolean favorite;
 
     public WatchList(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
         this.tmdbId = tmdbId;
         this.title = title;
         this.movieSerieEnum = movieSerieEnum;
         this.watchListStatus = watchListStatus;
+    }
+
+    public WatchList(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus, boolean favorite) {
+        this.tmdbId = tmdbId;
+        this.title = title;
+        this.movieSerieEnum = movieSerieEnum;
+        this.watchListStatus = watchListStatus;
+        this.favorite = favorite;
     }
 
 }
