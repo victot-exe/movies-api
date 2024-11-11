@@ -16,7 +16,7 @@ public interface TMDBClientFeign {
 
     @GetMapping("/trending/movie/{timeWindow}")
     ResultResponseDTO<TrendingMovieDTO> getTrendingMovies(@PathVariable("timeWindow") String timeWindow,
-                                                          @RequestParam("language") String language);
+        @RequestParam("language") String language);
 
     @GetMapping("/genre/movie/list")
     GenresResponseDTO getGenres(@RequestParam("language") String language);
@@ -36,9 +36,14 @@ public interface TMDBClientFeign {
     @GetMapping("/search/tv")
     ResultResponseDTO<SerieDTO> getSerie(@RequestParam("query") String serieName);
 
+
+    @GetMapping("/discover/movie")
+    ResultResponseDTO<MovieDTO> getMoviesByGenre(@RequestParam("with_genres") String genre);
+
     @GetMapping("/tv/{series_id}")
     SerieDTO searchSerieById(@PathVariable("series_id") Integer tmdbId,
                              @RequestParam("append_to_response") String appendToResponse,
                              @RequestParam("language") String language);
+
 
 }
