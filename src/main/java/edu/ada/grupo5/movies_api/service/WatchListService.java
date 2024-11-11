@@ -92,7 +92,7 @@ public class WatchListService {
 
     //recomendaçao de filme (watched) por genero buscando no TMDB.
     public List<RecommendedMovieDTO> getGenreBasedRecommendations() {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
 
         List<WatchList> favoriteItems = watchListRepository.findAllByUserId(userId).stream()
                 .filter(item -> item.getWatchListStatus() == WatchListStatus.WATCHED|| item.getWatchListStatus() == WatchListStatus.WATCHING)
@@ -101,7 +101,7 @@ public class WatchListService {
         Map<Integer, Long> genreCounts = favoriteItems.stream()
                 .map(WatchList::getTitle)
                 .flatMap(title -> tmdbClientFeign.getMovie(title).getResults().stream())
-                .flatMap(movie -> movie.getGenreIds().stream())
+                .flatMap(movie -> movie.getGenre_ids().stream())
                 .collect(Collectors.groupingBy(genre -> genre, Collectors.counting()));
 
         List<Integer> popularGenres = genreCounts.entrySet().stream()
@@ -126,7 +126,7 @@ public class WatchListService {
     //Deletar favorito
 
     public void delete(String tmdbId) {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         WatchList watchList = watchListRepository.findByTmdbIdAndUserId(tmdbId, userId);
         if (watchList != null) {
             watchListRepository.delete(watchList);

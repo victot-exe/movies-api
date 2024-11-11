@@ -24,5 +24,5 @@ public interface WatchListRepository extends JpaRepository<WatchList, Long> {
     @Query("SELECT w FROM WatchList w WHERE w.favorite = true")
     List<WatchList> findAllFavorites();
 
-    WatchList findByTmdbIdAndUserId(String tmdbId, String userId);
+    WatchList findByTmdbIdAndUserId(String tmdbId, Integer userId);
 }

@@ -61,7 +61,7 @@ public class WatchListController {
         watchListService.save(tmdbId, title, movieSerieEnum, watchListStatus, true);
     }
 
-    @PostMapping("/favorite/delete")
+    @DeleteMapping("/favorite/delete")
     public void deleteFromFavorites(@RequestParam String tmdbId) {
 
         watchListService.delete(tmdbId);
