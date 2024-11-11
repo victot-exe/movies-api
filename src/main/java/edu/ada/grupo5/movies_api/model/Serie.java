@@ -16,7 +16,7 @@ import java.io.Serializable;
 //TODO : implementar modelo para o bd
 public class Serie extends BaseModel implements Serializable {
 
-    private String title;
+    private String name;
     private int tmdbId;
     public boolean adult;
     public String original_language;

@@ -8,4 +8,8 @@ import org.springframework.stereotype.Service;
 public interface SerieRepository extends JpaRepository<Serie, Long> {
 
     boolean existsByTmdbId(int tmdbId);
+
+    void deleteByTmdbId(int tmdbId);
+
+    Serie getReferenceByTmdbId(int id);
 }

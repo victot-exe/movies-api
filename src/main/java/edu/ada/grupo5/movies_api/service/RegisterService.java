@@ -21,7 +21,7 @@ public class RegisterService {
 
     public ResponseDTO<String> register(UserDTO data) {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User user = new User(data.name(), data.login(), encryptedPassword, data.role());
+        User user = new User(data.login(), encryptedPassword, data.role());
         userService.save(user);
         Token token = tokenService.generateToken(user);
         userService.updateToken(user, token);

@@ -25,13 +25,12 @@ public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue
     private Integer id;
-    private String name;
     private String login;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "token_id")
     private Token token;
 
@@ -41,8 +40,7 @@ public class User implements UserDetails, Serializable {
     private LocalDateTime createdAt = LocalDateTime.now();
 
 
-    public User(String name, String login, String password, UserRole role) {
-        this.name = name;
+    public User(String login, String password, UserRole role) {
         this.login = login;
         this.password = password;
         this.role = role;

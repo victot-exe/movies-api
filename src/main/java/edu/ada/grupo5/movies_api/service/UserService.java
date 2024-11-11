@@ -34,7 +34,7 @@ public class UserService {
 
     public UserDTO findUserDTOByLogin(String login){
         User user = userRepository.findUserByLogin(login);
-        return new UserDTO(user.getId(), user.getName(), user.getLogin(), user.getPassword(),user.getRole());
+        return new UserDTO(user.getId(), user.getLogin(), user.getPassword(),user.getRole());
     }
 
     public User save(User user) {
@@ -44,7 +44,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public ResponseDTO<String> delete(String id) {
+    public ResponseDTO<String> delete(Integer id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("User not found");
         }

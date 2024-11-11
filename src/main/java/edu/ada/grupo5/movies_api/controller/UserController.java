@@ -20,8 +20,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.findUserDTOByLogin(login));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO<String>> deleteUser(@PathVariable("id") String id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDTO<String>> deleteUser(@PathVariable("id") Integer id) {
         ResponseDTO<String> response = userService.delete(id);
         return ResponseEntity.ok(response);
     }

@@ -3,6 +3,7 @@ package edu.ada.grupo5.movies_api.controller;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
+import edu.ada.grupo5.movies_api.model.Serie;
 import edu.ada.grupo5.movies_api.service.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,10 @@ public class SeriesController {
     @GetMapping("/airing_today")
     public ResponseEntity<ResponseDTO<ResultResponseDTO<SerieDTO>>> getAiringToday(@RequestParam(defaultValue = "en-US") String language,
                                                                                    @RequestParam(defaultValue = "1") String page) {
-        ResultResponseDTO<SerieDTO> data = seriesService.getAiringToday(language, page);
-        ResponseDTO<ResultResponseDTO<SerieDTO>> response = seriesService.getAiringTodayResponse(data);
+        ResponseDTO<ResultResponseDTO<SerieDTO>> response = seriesService.getAiringToday(language, page);
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/search/serie")
     public ResponseEntity<ResponseDTO<List<SerieDTO>>> getSerie(@RequestParam String serieName) {
@@ -47,6 +48,24 @@ public class SeriesController {
                                                               @RequestParam(defaultValue = "") String appendToResponse,
                                                               @RequestParam(defaultValue = "en-US") String language) {
         ResponseDTO<SerieDTO> response = seriesService.searchSerie(tmdbId, appendToResponse, language);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ResponseDTO<List<Serie>>> getAllSeries() {
+        ResponseDTO<List<Serie>> series = seriesService.getAllSerie();
+        return ResponseEntity.ok(series);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseDTO<SerieDTO>> updateSerie(@PathVariable("id") Long id, @RequestBody SerieDTO serie) {
+        ResponseDTO<SerieDTO> response = seriesService.updateSerie(id, serie);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDTO> deleteSerie(@PathVariable("id") Long id) {
+        ResponseDTO<String> response = seriesService.deleteSerieById(id);
         return ResponseEntity.ok(response);
     }
 }
