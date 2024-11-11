@@ -29,7 +29,7 @@ public class WatchListController {
         @RequestParam String title,
         @RequestParam MovieSerieEnum movieSerieEnum,
         @RequestParam WatchListStatus watchListStatus,
-        boolean favorite)    {
+        @RequestParam(defaultValue = "false") boolean favorite)    {
         watchListService.save(tmdbId, title, movieSerieEnum, watchListStatus, favorite);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -57,6 +57,7 @@ public class WatchListController {
     public void markAsFavorite(@RequestParam String tmdbId, @RequestParam String title, @RequestParam MovieSerieEnum movieSerieEnum, @RequestParam WatchListStatus watchListStatus) {
         watchListService.save(tmdbId, title, movieSerieEnum, watchListStatus, true);
     }
+
     @PostMapping("/favorite/delete")
     public void deleteFromFavorites(@RequestParam String tmdbId) {
 
