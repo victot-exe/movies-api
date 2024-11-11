@@ -32,9 +32,9 @@ public class UserService {
         return userDetails;
     }
 
-    public UserDTO findUserDTOByLogin(String login){
+    public UserDTO findUserDTOByLogin(String login) {
         User user = userRepository.findUserByLogin(login);
-        return new UserDTO(user.getId(), user.getLogin(), user.getPassword(),user.getRole());
+        return new UserDTO(user.getId(), user.getLogin(), user.getPassword(), user.getRole());
     }
 
     public User save(User user) {
@@ -57,9 +57,9 @@ public class UserService {
     }
 
     public void updateToken(User user, Token token) {
-            user.setToken(token);
-            tokenRepository.save(token);
-            userRepository.updateToken(user.getId(), token);
+        user.setToken(token);
+        tokenRepository.save(token);
+        userRepository.updateToken(user.getId(), token);
     }
 
     public User findUserByLogin(String login) {

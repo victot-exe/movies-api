@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 //TODO: implementar restante que serao utilizados nas rotas e excecoes
 @Service
@@ -62,7 +61,7 @@ public class SeriesService {
             return saveSerie(dto);
         } else {
             Serie serie = serieRepository.getReferenceById(id);
-            updateData(serie,dto);
+            updateData(serie, dto);
             serieRepository.save(serie);
             return ResponseDTO.<SerieDTO>builder()
                     .message("Serie updated successfully")
@@ -117,6 +116,7 @@ public class SeriesService {
             serieRepository.save(convertFromDTO(dto));
         }
     }
+
     private void updateData(Serie serieToUpdate, SerieDTO dto) {
         serieToUpdate.setName(dto.getName());
         serieToUpdate.setTmdbId(dto.getId());

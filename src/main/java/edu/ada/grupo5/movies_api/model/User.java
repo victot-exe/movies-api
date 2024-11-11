@@ -23,7 +23,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails, Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String login;
     private String password;

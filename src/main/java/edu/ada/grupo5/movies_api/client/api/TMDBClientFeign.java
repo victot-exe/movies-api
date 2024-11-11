@@ -35,7 +35,7 @@ public interface TMDBClientFeign {
 
     @GetMapping("/search/tv")
     ResultResponseDTO<SerieDTO> getSerie(@RequestParam("query") String serieName);
-                               
+
     @GetMapping("/tv/{series_id}")
     SerieDTO searchSerieById(@PathVariable("series_id") Integer tmdbId,
                              @RequestParam("append_to_response") String appendToResponse,

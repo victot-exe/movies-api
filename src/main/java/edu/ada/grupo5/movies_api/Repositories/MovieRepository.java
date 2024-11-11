@@ -1,7 +1,6 @@
 package edu.ada.grupo5.movies_api.Repositories;
 
 import edu.ada.grupo5.movies_api.model.Movie;
-import edu.ada.grupo5.movies_api.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
