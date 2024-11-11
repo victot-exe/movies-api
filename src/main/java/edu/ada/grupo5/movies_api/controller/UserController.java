@@ -3,11 +3,12 @@ package edu.ada.grupo5.movies_api.controller;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.UserDTO;
 import edu.ada.grupo5.movies_api.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/user")
 public class UserController {

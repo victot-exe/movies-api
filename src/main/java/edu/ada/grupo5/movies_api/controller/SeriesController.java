@@ -5,6 +5,7 @@ import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
 import edu.ada.grupo5.movies_api.model.Serie;
 import edu.ada.grupo5.movies_api.service.SeriesService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import java.time.Instant;
 import java.util.List;
 
 //TODO: revisar
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/tmdb/tv")
 public class SeriesController {
