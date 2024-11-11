@@ -1,6 +1,7 @@
 package edu.ada.grupo5.movies_api.client.api;
 
 import edu.ada.grupo5.movies_api.dto.tmdb.*;
+import edu.ada.grupo5.movies_api.model.Movie;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,11 +28,16 @@ public interface TMDBClientFeign {
     @GetMapping("/search/movie")
     ResultResponseDTO<MovieDTO> getMovie(@RequestParam("query") String movieName);
 
+    @GetMapping("/movie/{movie_id}")
+    Movie searchMovieById(@PathVariable("movie_id") Integer tmdbId,
+                          @RequestParam("append_to_response") String appendToResponse,
+                          @RequestParam("language") String language);
+
     @GetMapping("/search/tv")
     ResultResponseDTO<SerieDTO> getSerie(@RequestParam("query") String serieName);
                                
     @GetMapping("/tv/{series_id}")
-    SerieDTO searchSerieById(@PathVariable("series_id") Integer imdbId,
+    SerieDTO searchSerieById(@PathVariable("series_id") Integer tmdbId,
                              @RequestParam("append_to_response") String appendToResponse,
                              @RequestParam("language") String language);
 

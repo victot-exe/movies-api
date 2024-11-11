@@ -21,11 +21,14 @@ public class WatchListService {
     private WatchListRepository watchListRepository;
     @Autowired
     private SeriesService seriesService;
+    @Autowired
+    private MovieService movieService;
 
     public void save(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
         WatchList watchList = new WatchList(tmdbId, title, movieSerieEnum, watchListStatus);
 
-        seriesService.saveSerieBySearch(Integer.parseInt(tmdbId));
+        if (movieSerieEnum == MovieSerieEnum.SERIE) seriesService.saveSerieBySearch(Integer.parseInt(tmdbId));
+        if (movieSerieEnum == MovieSerieEnum.MOVIE) movieService.saveMovieBySearch(Integer.parseInt(tmdbId));
         Integer userId = getActiveUserId();
         watchList.setUserId(userId);
 

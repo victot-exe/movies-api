@@ -64,7 +64,7 @@ public class SeriesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO> deleteSerie(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseDTO<String>> deleteSerie(@PathVariable("id") Long id) {
         ResponseDTO<String> response = seriesService.deleteSerieById(id);
         return ResponseEntity.ok(response);
     }

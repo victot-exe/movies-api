@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.ArrayList;
+
 @Entity
 @Table(name = "movies")
 @Getter
@@ -14,17 +16,23 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie extends BaseModel {
+    public boolean adult;
     @Column(nullable = false)
     private String title;
-    private String director;
-    private String genre;
-    @JsonProperty("year")
-    private Integer releaseYear;
-    private String country;
-    private String language;
-    private Integer duration;
+    @JsonProperty("id")
+    public int tmdbId;
     @Column(unique = true)
-    private Integer tmdbId;
-    @Column(unique = true)
-    private String imdbId;
+    private String imdb_id;
+    public String original_language;
+    public String original_title;
+    public String release_date;
+    public String status;
+    public double vote_average;
+
+//    private Integer duration;
+//    private String language;
+//    private String director;
+//    private String genre;
+//    @JsonProperty("year")
+//    private Integer releaseYear;
 }
