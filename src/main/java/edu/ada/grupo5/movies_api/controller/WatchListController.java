@@ -5,6 +5,7 @@ import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.model.MovieSerieEnum;
 import edu.ada.grupo5.movies_api.model.WatchListStatus;
 import edu.ada.grupo5.movies_api.service.WatchListService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/watchlist")
 @Tag(name = "WatchList")
