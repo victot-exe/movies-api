@@ -27,34 +27,40 @@ public class WatchListService {
     private WatchListRepository watchListRepository;
     @Autowired
     private TMDBClientFeign tmdbClientFeign;
+    @Autowired
+    private SeriesService seriesService;
+    @Autowired
+    private MovieService movieService;
 
     public void save(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus, boolean favorite){
         WatchList watchList = new WatchList(tmdbId, title, movieSerieEnum, watchListStatus, favorite);
 
-        String userId = getActiveUserId();
+        if (movieSerieEnum == MovieSerieEnum.SERIE) seriesService.saveSerieBySearch(Integer.parseInt(tmdbId));
+        if (movieSerieEnum == MovieSerieEnum.MOVIE) movieService.saveMovieBySearch(Integer.parseInt(tmdbId));
+        Integer userId = getActiveUserId();
         watchList.setUserId(userId);
 
         watchListRepository.save(watchList);
     }
 
     public List<WatchListDTO> getAll() {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         return watchListRepository.findAllByUserId(userId).stream().map(WatchListDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
     public void updateWatchListStatus(String tmdbId, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         this.watchListRepository.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus, userId);
     }
 
     @Transactional
-    public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum){
-        String userId = getActiveUserId();
+    public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum) {
+        Integer userId = getActiveUserId();
         this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
     }
 
-    public String getActiveUserId(){
+    public Integer getActiveUserId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getId();
     }

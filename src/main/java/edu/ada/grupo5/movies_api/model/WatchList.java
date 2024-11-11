@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @Entity
@@ -24,8 +21,9 @@ public class WatchList {
     private MovieSerieEnum movieSerieEnum;
     @Enumerated(EnumType.STRING)
     private WatchListStatus watchListStatus;
-    private String userId;
+    //private String userId;
     private boolean favorite;
+    private Integer userId;
 
     public WatchList(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
         this.tmdbId = tmdbId;

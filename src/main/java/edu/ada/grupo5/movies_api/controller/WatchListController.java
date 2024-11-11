@@ -7,6 +7,7 @@ import edu.ada.grupo5.movies_api.dto.tmdb.MovieDTO;
 import edu.ada.grupo5.movies_api.model.MovieSerieEnum;
 import edu.ada.grupo5.movies_api.model.WatchListStatus;
 import edu.ada.grupo5.movies_api.service.WatchListService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/watchlist")
 @Tag(name = "WatchList")
@@ -35,20 +37,21 @@ public class WatchListController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<WatchListDTO> getAll(){
+    public List<WatchListDTO> getAll() {
         return this.watchListService.getAll();
     }
 
     @PutMapping("/{tmdbId}")
     public ResponseEntity<Void> updateWatchListStatus(@PathVariable("tmdbId") String tmdbId,
-            @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum,
-            @RequestParam("watchListStatus") WatchListStatus watchListStatus){
+                                                      @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum,
+                                                      @RequestParam("watchListStatus") WatchListStatus watchListStatus) {
         this.watchListService.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/{tmdbId}")
-    public ResponseEntity<Void> deleteByTmdbIdAndByMovieSerieEnum(@PathVariable("tmdbId") String tmdbId, @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum){
+   @DeleteMapping("/{tmdbId}")
+    public ResponseEntity<Void> deleteByTmdbIdAndByMovieSerieEnum(@PathVariable("tmdbId") String tmdbId,
+                                                                  @RequestParam("movieSerieEnum") MovieSerieEnum movieSerieEnum) {
         this.watchListService.deleteByTmdbIdAndByMovieSerieEnum(tmdbId, movieSerieEnum);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -2,16 +2,18 @@ package edu.ada.grupo5.movies_api.controller;
 
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.GenresResponseDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.MovieTitleIdDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.TrendingMovieDTO;
-import edu.ada.grupo5.movies_api.dto.tmdb.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
