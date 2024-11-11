@@ -13,18 +13,21 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private UserService userService;
 
     public ResponseDTO<String> login(AuthLoginDTO data) {
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((User) auth.getPrincipal());
-            return tokenService.generateResponse(token);
-
+            User user = userService.findUserByLogin(data.login());
+            tokenService.invalidateToken(user.getToken().getToken());
+            userService.updateToken(user, token);
+            return tokenService.generateResponse(token.getToken());
         } catch (Exception e) {
             throw new ValidationErrorException("Invalid username or password.");
         }

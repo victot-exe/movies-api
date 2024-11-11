@@ -26,31 +26,29 @@ public class WatchListService {
         WatchList watchList = new WatchList(tmdbId, title, movieSerieEnum, watchListStatus);
 
         seriesService.saveSerieBySearch(Integer.parseInt(tmdbId));
-
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         watchList.setUserId(userId);
 
         watchListRepository.save(watchList);
     }
 
     public List<WatchListDTO> getAll() {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         return watchListRepository.findAllByUserId(userId).stream().map(WatchListDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
     public void updateWatchListStatus(String tmdbId, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         this.watchListRepository.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus, userId);
     }
 
-    @Transactional
     public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum) {
-        String userId = getActiveUserId();
+        Integer userId = getActiveUserId();
         this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
     }
 
-    public String getActiveUserId() {
+    public Integer getActiveUserId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getId();
     }

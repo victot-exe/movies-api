@@ -21,7 +21,7 @@ public class WatchList {
     private MovieSerieEnum movieSerieEnum;
     @Enumerated(EnumType.STRING)
     private WatchListStatus watchListStatus;
-    private String userId;
+    private Integer userId;
 
     public WatchList(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus) {
         this.tmdbId = tmdbId;

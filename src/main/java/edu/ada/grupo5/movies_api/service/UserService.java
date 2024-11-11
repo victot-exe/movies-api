@@ -1,7 +1,10 @@
 package edu.ada.grupo5.movies_api.service;
 
+import edu.ada.grupo5.movies_api.Repositories.TokenRepository;
 import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.dto.ResponseDTO;
+import edu.ada.grupo5.movies_api.dto.UserDTO;
+import edu.ada.grupo5.movies_api.model.Token;
 import edu.ada.grupo5.movies_api.model.User;
 import edu.ada.grupo5.movies_api.service.exception.RegisterErrorException;
 import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
@@ -18,13 +21,20 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
 
-    public UserDetails findUserByLogin(String login) {
+    public UserDetails findUserDetailsByLogin(String login) {
         UserDetails userDetails = userRepository.findByLogin(login);
         if (userDetails == null) {
             throw new ResourceNotFoundException("User not found");
         }
         return userDetails;
+    }
+
+    public UserDTO findUserDTOByLogin(String login){
+        User user = userRepository.findUserByLogin(login);
+        return new UserDTO(user.getId(), user.getName(), user.getLogin(), user.getPassword(),user.getRole());
     }
 
     public User save(User user) {
@@ -45,4 +55,16 @@ public class UserService {
                 .data("")
                 .build();
     }
+
+    public void updateToken(User user, Token token) {
+            user.setToken(token);
+            tokenRepository.save(token);
+            userRepository.updateToken(user.getId(), token);
+    }
+
+    public User findUserByLogin(String login) {
+        return userRepository.findUserByLogin(login);
+    }
+
+
 }
