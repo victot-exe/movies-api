@@ -27,5 +27,9 @@ Esta API utiliza conexão com a API externa The Movie Database (TMDB) para busca
 5. Acesse a documentação Swagger do projeto no caminho abaixo:
 http://localhost:8090/swagger-ui.html
 
+## Diagrama de classes
+
+<img src="src/main/resources/assets/movies_api_diagram.png">
+
 ## Contribuição
 Contribuições são bem-vindas! Abra uma issue para discutir as mudanças antes de submeter uma pull request.
