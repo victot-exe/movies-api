@@ -124,4 +124,27 @@ public class WatchlistServiceTests {
         verify(watchListRepository, times(1)).findAllByUserId(1);
     }
 
+    @Test
+    public void updateWatchListStatus_deveChamarUpdateWatchListStatusDeWatchListRepository(){
+
+        String tmdbId = "123";
+        MovieSerieEnum movieSerieEnum = MovieSerieEnum.MOVIE;
+        WatchListStatus watchListStatus = WatchListStatus.WATCHING;
+
+        watchListService.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus);
+
+        verify(watchListRepository, times(1)).updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus, 1);
+    }
+
+    @Test
+    public void deleteByTmdbIdAndByMovieSerieEnum_deveChamarDeleteByTmdbIdAndMovieSerieEnumDeWatchListRepository(){
+
+        String tmdbId = "123";
+        MovieSerieEnum movieSerieEnum = MovieSerieEnum.MOVIE;
+
+        watchListService.deleteByTmdbIdAndByMovieSerieEnum(tmdbId, movieSerieEnum);
+
+        verify(watchListRepository, times(1)).deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, 1);
+    }
+
 }
