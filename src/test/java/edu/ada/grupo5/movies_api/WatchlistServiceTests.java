@@ -40,7 +40,7 @@ public class WatchlistServiceTests {
     void setUp() {
         // Configura um contexto de segurança com um usuário mockado
         User user = new User("testUser", "password", UserRole.ADMIN);
-        user.setId(1); // Defina o ID do usuário ativo
+        user.setId(1);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         Authentication authentication = Mockito.mock(Authentication.class);
 
@@ -57,6 +57,8 @@ public class WatchlistServiceTests {
         List<WatchListDTO> result = watchListService.getAll();
 
         Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals("A volta dos que não foram", result.get(0).getTitle());
 
         verify(watchListRepository, times(1)).findAllByUserId(1);
     }
