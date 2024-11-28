@@ -18,14 +18,13 @@ import java.util.List;
 @Service
 public class SeriesService {
 
-    @Autowired
     private final TMDBClientFeign tmdbClientFeign;
-    @Autowired
     private SerieRepository serieRepository;
 
-    @Autowired
-    public SeriesService(TMDBClientFeign tmdbClientFeign) {
+
+    public SeriesService(TMDBClientFeign tmdbClientFeign, SerieRepository serieRepository) {
         this.tmdbClientFeign = tmdbClientFeign;
+        this.serieRepository = serieRepository;
     }
 
     public ResponseDTO<ResultResponseDTO<SerieDTO>> getAiringToday(String language, String page) {
