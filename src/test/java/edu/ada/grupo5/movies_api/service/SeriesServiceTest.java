@@ -6,6 +6,7 @@ import edu.ada.grupo5.movies_api.dto.ResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
 import edu.ada.grupo5.movies_api.model.Serie;
+import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -76,7 +78,7 @@ class SeriesServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar uma serie com sucesso")
+    @DisplayName("Deve retornar airing today com sucesso")
     void getAiringToday() {
         ResultResponseDTO<SerieDTO> responseDTO = new ResultResponseDTO<>();
         responseDTO.setPage(1);
@@ -148,6 +150,7 @@ class SeriesServiceTest {
 
 
     @Test
+    @DisplayName("Deve retornar uma serie com sucesso")
     void getSerie() {
         ResultResponseDTO<SerieDTO> serieDTOResultResponseDTO = new ResultResponseDTO<>();
         serieDTOResultResponseDTO.setPage(1);
@@ -169,6 +172,7 @@ class SeriesServiceTest {
     }
 
     @Test
+    @DisplayName("Deve salvar assim que buscada")
     void saveSerieBySearch() {
 
         when(feign.searchSerieById(anyInt(),anyString(),anyString())).thenReturn(serie);
@@ -183,35 +187,38 @@ class SeriesServiceTest {
 
     }
 
-    //TODO: analisar casos de update
     @Test
     @DisplayName("Atualiza serieDTO e serie com sucesso")
     void updateSerie() {
         SerieDTO updatedSerie = new SerieDTO();
         Serie updatedEntity = new Serie();
-        BeanUtils.copyProperties(serie, updatedSerie);
+        BeanUtils.copyProperties(serie,updatedSerie);
         BeanUtils.copyProperties(entity, updatedEntity);
-        updatedSerie.setName("Updated Test");
-        entity.setName("Updated Test");
-        response = ResponseDTO.<SerieDTO>builder()
-                .message("Serie updated successfully")
-                .timestamp(Instant.now())
-                .data(updatedSerie)
-                .build();
 
-        when(repository.existsByTmdbId(any(Integer.class))).thenReturn(false);
-        //when(repository.getReferenceByTmdbId(any(Integer.class))).thenReturn(entity);
+        Serie serieToUpdate = entity;
+
+        when(repository.existsByTmdbId(anyInt())).thenReturn(true);
+        when(repository.getReferenceById(anyLong())).thenReturn(serieToUpdate);
         when(repository.save(any(Serie.class))).thenReturn(updatedEntity);
+
+        updatedSerie.setId(10);
+        updatedSerie.setName("Updated Test");
+
+        response = service.updateSerie(1L, updatedSerie);
+
+        verify(repository, times(1)).existsByTmdbId(updatedSerie.getId());
+        verify(repository, times(1)).getReferenceById(anyLong());
+        verify(repository, times(1)).save(serieToUpdate);
 
         assertThat(response).isNotNull();
         assertThat(response.getData()).isEqualTo(updatedSerie);
         assertThat(response.getMessage()).isEqualTo("Serie updated successfully");
-        assertThat(response.getData()).isEqualTo(service.saveSerie(updatedSerie).getData());
 
         verify(repository, times(1)).existsByTmdbId(updatedSerie.getId());
     }
 
     @Test
+    @DisplayName("Deve deletar com sucesso")
     void deleteSerieById() {
         when(repository.existsById(any(Long.class))).thenReturn(true);
 
@@ -223,6 +230,16 @@ class SeriesServiceTest {
 
         verify(repository, times(1)).existsById(anyLong());
         verify(repository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    void DeveLancarExcessaoAoDeletar() {
+        when(repository.existsById(any(Long.class))).thenReturn(false);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            service.deleteSerieById(anyLong());
+        });
+        assertThat(exception.getMessage()).isEqualTo("Serie not found");
     }
 
 }
