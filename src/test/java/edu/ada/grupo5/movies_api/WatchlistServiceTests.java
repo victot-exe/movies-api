@@ -46,7 +46,6 @@ public class WatchlistServiceTests {
 
     @BeforeEach
     void setUp() {
-        // Configura um contexto de segurança com um usuário mockado
         User user = new User("testUser", "password", UserRole.ADMIN);
         user.setId(1);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
