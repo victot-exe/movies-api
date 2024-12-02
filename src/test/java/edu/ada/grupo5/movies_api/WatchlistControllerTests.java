@@ -1,6 +1,7 @@
 package edu.ada.grupo5.movies_api;
 
 import edu.ada.grupo5.movies_api.controller.WatchListController;
+import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.model.MovieSerieEnum;
 import edu.ada.grupo5.movies_api.model.WatchListStatus;
 import edu.ada.grupo5.movies_api.service.WatchListService;
@@ -12,6 +13,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,5 +48,15 @@ public class WatchlistControllerTests {
 
 
         verify(watchListService, times(1)).save(tmdbId,title,movieSerieEnum,watchListStatus,favorite);
+    }
+
+    @Test
+    public void getAll_DeveBuscarListaDaWatchlist(){
+
+        List<WatchListDTO> retorno = watchListController.getAll();
+
+        assertNotNull(retorno);
+
+        verify(watchListService, times(1)).getAll();
     }
 }
