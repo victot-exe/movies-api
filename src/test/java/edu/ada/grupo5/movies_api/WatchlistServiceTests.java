@@ -1,6 +1,7 @@
 package edu.ada.grupo5.movies_api;
 
 import edu.ada.grupo5.movies_api.Repositories.WatchListRepository;
+import edu.ada.grupo5.movies_api.dto.RecommendedMovieDTO;
 import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.model.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
@@ -16,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,9 +27,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class WatchlistServiceTests {
 
     @InjectMocks
@@ -61,7 +65,7 @@ public class WatchlistServiceTests {
     public void save_deveSalvarNaWatchlistComSucesso(){
 
         String tmdbId = "123";
-        String title = "As tranças do rei careca";
+        String title = "Clube da luta";
         MovieSerieEnum movieSerieEnum = MovieSerieEnum.MOVIE;
         WatchListStatus watchListStatus = WatchListStatus.TO_WATCH;
         boolean favorite = true;
@@ -107,8 +111,8 @@ public class WatchlistServiceTests {
         List<WatchListDTO> result = watchListService.getAll();
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("A volta dos que não foram", result.getFirst().getTitle());
+        assertEquals(1, result.size());
+        assertEquals("A volta dos que não foram", result.getFirst().getTitle());
 
         verify(watchListRepository, times(1)).findAllByUserId(1);
     }
@@ -145,6 +149,35 @@ public class WatchlistServiceTests {
         watchListService.deleteByTmdbIdAndByMovieSerieEnum(tmdbId, movieSerieEnum);
 
         verify(watchListRepository, times(1)).deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, 1);
+    }
+
+    @Test
+    public void getRecommendedMovies_deveRetornarListaDeFilmesRecomendados(){
+        ArrayList<WatchList> allFavorites = new ArrayList<>();
+        allFavorites.add(new WatchList("1", "Filme A", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("3", "Filme C", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("3", "Filme C", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("3", "Filme C", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("2", "Filme B", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("1", "Filme A", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("9", "Serie A", MovieSerieEnum.SERIE, WatchListStatus.WATCHING));
+        allFavorites.add(new WatchList("9", "Serie A", MovieSerieEnum.SERIE, WatchListStatus.WATCHING));
+        when(watchListRepository.findAllFavorites()).thenReturn(allFavorites);
+
+        List<RecommendedMovieDTO> result = watchListService.getRecommendedMovies();
+
+        assertEquals(4, result.size());
+        assertEquals("Filme C", result.get(0).getTitle());
+        assertEquals(3L, result.get(0).getFavoriteCount());
+    }
+
+    @Test
+    public void getRecommendedMovies_deveAceitarListaVaziaDeFavoritos(){
+        when(watchListRepository.findAllFavorites()).thenReturn(Collections.emptyList());
+
+        List<RecommendedMovieDTO> result = watchListService.getRecommendedMovies();
+
+        assertEquals(0, result.size());
     }
 
 }
