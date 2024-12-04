@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,19 +30,25 @@ public class WatchlistControllerTests {
     @Mock
     private WatchListService watchListService;
 
+    private String tmdbId;
+    private String title;
+    private MovieSerieEnum movieSerieEnum;
+    private WatchListStatus watchListStatus;
+
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
+        tmdbId = "123";
+        title = "Filme xpto";
+        movieSerieEnum = MovieSerieEnum.MOVIE;
+        watchListStatus = WatchListStatus.TO_WATCH;
     }
 
     @Test
     public void save_DeveSalvarNaWatchlistComSucesso(){
-        String tmdbId = "123";
-        String title = "Filme xpto";
-        MovieSerieEnum movieSerieEnum = MovieSerieEnum.MOVIE;
-        WatchListStatus watchListStatus = WatchListStatus.TO_WATCH;
+
         boolean favorite = true;
-        ResponseEntity<Object> response = watchListController.save(tmdbId, title, movieSerieEnum, watchListStatus, favorite);
+        ResponseEntity<Void> response = watchListController.save(tmdbId, title, movieSerieEnum, watchListStatus, favorite);
 
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -58,5 +65,15 @@ public class WatchlistControllerTests {
         assertNotNull(retorno);
 
         verify(watchListService, times(1)).getAll();
+    }
+
+    @Test
+    public void updateWatchListStatus_DeveAtualizarStatusNaWatchList(){
+
+        ResponseEntity<Void> response = watchListController.updateWatchListStatus(tmdbId, movieSerieEnum, watchListStatus);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+        verify(watchListService, times(1)).updateWatchListStatus(any(), any(), any());
     }
 }

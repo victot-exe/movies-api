@@ -27,7 +27,7 @@ public class WatchListController {
     private WatchListService watchListService;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam String tmdbId,
+    public ResponseEntity<Void> save(@RequestParam String tmdbId,
         @RequestParam String title,
         @RequestParam MovieSerieEnum movieSerieEnum,
         @RequestParam WatchListStatus watchListStatus,
