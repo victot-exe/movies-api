@@ -232,5 +232,4 @@ public class WatchlistServiceTests {
         verify(tmdbClientFeign, times(2)).getMovie(any());
         verify(tmdbClientFeign, times(2)).getMoviesByGenre(anyString());
     }
-
 }

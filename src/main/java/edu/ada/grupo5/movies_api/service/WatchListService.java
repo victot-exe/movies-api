@@ -55,7 +55,12 @@ public class WatchListService {
     @Transactional
     public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum) {
         Integer userId = getActiveUserId();
-        this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
+        WatchList watchList = watchListRepository.findByTmdbIdAndUserIdAndMovieSerieEnum(tmdbId, userId, movieSerieEnum);
+        if (watchList != null) {
+            this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
+        } else {
+            throw new RuntimeException("Item não encontrado em sua WatchList.");
+        }
     }
 
     public Integer getActiveUserId() {
@@ -116,16 +121,6 @@ public class WatchListService {
                 .collect(Collectors.toList());
 
         return recommendedMovieDTOs;
-    }
-
-    public void delete(String tmdbId) {
-        Integer userId = getActiveUserId();
-        WatchList watchList = watchListRepository.findByTmdbIdAndUserId(tmdbId, userId);
-        if (watchList != null) {
-            watchListRepository.delete(watchList);
-        } else {
-            throw new RuntimeException("Item não encontrado na lista de favoritos.");
-        }
     }
 
 }
