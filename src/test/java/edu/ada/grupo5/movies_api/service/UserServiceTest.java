@@ -10,15 +10,18 @@ import edu.ada.grupo5.movies_api.service.exception.RegisterErrorException;
 import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @InjectMocks
@@ -37,7 +40,6 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         user = new User();
         user.setId(1);
         user.setRole(UserRole.ADMIN);
@@ -53,8 +55,9 @@ public class UserServiceTest {
     public void deve_executar_pelo_menos_uma_vez_findByLogin_retornar_uma_excecao_ResourceNotFound(){
         when(userRepository.findByLogin(anyString())).thenReturn(null);
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> userService.findUserDetailsByLogin(anyString()));
+        assertEquals("User not found", exception.getMessage());
         verify(userRepository, times(1)).findByLogin(anyString());
     }
 
@@ -75,6 +78,7 @@ public class UserServiceTest {
         when(userRepository.save(user)).thenReturn(user);
 
         User salvo = userService.save(user);
+        verify(userRepository, times(1)).save(user);
         assertNotNull(salvo);
         assertEquals(1, salvo.getId());
         assertEquals(UserRole.ADMIN, salvo.getRole());
@@ -85,7 +89,9 @@ public class UserServiceTest {
     @Test
     public void deve_retornar_uma_excecao_de_RegisterErrorException(){
         when(userRepository.existsBylogin(anyString())).thenReturn(true);
-        assertThrows(RegisterErrorException.class, () -> userService.save(user));
+        RegisterErrorException exception = assertThrows(RegisterErrorException.class, () -> userService.save(user));
+        assertEquals("User already registered", exception.getMessage());
+        verify(userRepository, times(1)).existsBylogin(anyString());
     }
 
     @Test
@@ -108,7 +114,6 @@ public class UserServiceTest {
     public void deve_executar_pelo_menos_uma_vez_tokenRepository_save_and_updateToken(){
 
         userService.updateToken(user, token);
-        //Verifica se os metodos internos do updateToken estão sendo chamados
         verify(tokenRepository, times(1)).save(token);
         verify(userRepository, times(1)).updateToken(user.getId(), token);
     }
