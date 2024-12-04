@@ -63,8 +63,9 @@ public class WatchListController {
     }
 
     @GetMapping("/genrerecommendations")
-    public List<RecommendedMovieDTO> getGenreBasedRecommendations() {
-        return watchListService.getGenreBasedRecommendations();
+    public ResponseEntity<List<RecommendedMovieDTO>> getGenreBasedRecommendations() {
+        List<RecommendedMovieDTO> recommendedMovies = watchListService.getGenreBasedRecommendations();
+        return ResponseEntity.status(HttpStatus.FOUND).body(recommendedMovies);
     }
 }
 

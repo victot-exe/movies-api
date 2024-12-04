@@ -106,4 +106,24 @@ public class WatchlistControllerTests {
 
         verify(watchListService, times(1)).getRecommendedMovies();
     }
+
+    @Test
+    public void getGenreBasedRecommendations_DeveBuscarRecomendacoesComBaseNoGenero() {
+        RecommendedMovieDTO filmeA = new RecommendedMovieDTO("Filme A", "123", 2L);
+        RecommendedMovieDTO filmeB = new RecommendedMovieDTO("Filme B", "001", 1L);
+        List<RecommendedMovieDTO> recommendedMovies = new ArrayList<>();
+        recommendedMovies.add(filmeA);
+        recommendedMovies.add(filmeB);
+
+        when(watchListService.getGenreBasedRecommendations()).thenReturn(recommendedMovies);
+
+        ResponseEntity<List<RecommendedMovieDTO>> response = watchListController.getGenreBasedRecommendations();
+
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Filme A", response.getBody().get(0).getTitle());
+
+        verify(watchListService, times(1)).getGenreBasedRecommendations();
+
+    }
 }
