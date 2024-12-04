@@ -1,7 +1,11 @@
 package edu.ada.grupo5.movies_api;
 
 import edu.ada.grupo5.movies_api.Repositories.WatchListRepository;
+import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
+import edu.ada.grupo5.movies_api.dto.RecommendedMovieDTO;
 import edu.ada.grupo5.movies_api.dto.WatchListDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.MovieDTO;
+import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.model.*;
 import edu.ada.grupo5.movies_api.service.MovieService;
 import edu.ada.grupo5.movies_api.service.SeriesService;
@@ -13,21 +17,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class WatchlistServiceTests {
 
     @InjectMocks
@@ -42,7 +46,8 @@ public class WatchlistServiceTests {
     @Mock
     private WatchListRepository watchListRepository;
 
-
+    @Mock
+    private TMDBClientFeign tmdbClientFeign;
 
     @BeforeEach
     void setUp() {
@@ -60,7 +65,7 @@ public class WatchlistServiceTests {
     public void save_deveSalvarNaWatchlistComSucesso(){
 
         String tmdbId = "123";
-        String title = "As tranças do rei careca";
+        String title = "Clube da luta";
         MovieSerieEnum movieSerieEnum = MovieSerieEnum.MOVIE;
         WatchListStatus watchListStatus = WatchListStatus.TO_WATCH;
         boolean favorite = true;
@@ -106,8 +111,8 @@ public class WatchlistServiceTests {
         List<WatchListDTO> result = watchListService.getAll();
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("A volta dos que não foram", result.getFirst().getTitle());
+        assertEquals(1, result.size());
+        assertEquals("A volta dos que não foram", result.getFirst().getTitle());
 
         verify(watchListRepository, times(1)).findAllByUserId(1);
     }
@@ -146,4 +151,84 @@ public class WatchlistServiceTests {
         verify(watchListRepository, times(1)).deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, 1);
     }
 
+    @Test
+    public void getRecommendedMovies_deveRetornarListaDeFilmesRecomendados(){
+        ArrayList<WatchList> allFavorites = new ArrayList<>();
+        allFavorites.add(new WatchList("1", "Filme A", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("3", "Filme C", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("3", "Filme C", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("3", "Filme C", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("2", "Filme B", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("1", "Filme A", MovieSerieEnum.MOVIE, WatchListStatus.TO_WATCH));
+        allFavorites.add(new WatchList("9", "Serie A", MovieSerieEnum.SERIE, WatchListStatus.WATCHING));
+        allFavorites.add(new WatchList("9", "Serie A", MovieSerieEnum.SERIE, WatchListStatus.WATCHING));
+        when(watchListRepository.findAllFavorites()).thenReturn(allFavorites);
+
+        List<RecommendedMovieDTO> result = watchListService.getRecommendedMovies();
+
+        assertEquals(4, result.size());
+        assertEquals("Filme C", result.get(0).getTitle());
+        assertEquals(3L, result.get(0).getFavoriteCount());
+    }
+
+    @Test
+    public void getRecommendedMovies_deveAceitarListaVaziaDeFavoritos(){
+        when(watchListRepository.findAllFavorites()).thenReturn(Collections.emptyList());
+
+        List<RecommendedMovieDTO> result = watchListService.getRecommendedMovies();
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void getGenreBasedRecommendations_DeveRetornarListaDeRecomendadosComBaseNoGênero(){
+
+        List<WatchList> watchList = Arrays.asList(
+                new WatchList("1", "Filme A", MovieSerieEnum.MOVIE, WatchListStatus.WATCHED),
+                new WatchList("2", "Filme B", MovieSerieEnum.MOVIE, WatchListStatus.WATCHED));
+
+        when(watchListRepository.findAllByUserId(1)).thenReturn(watchList);
+
+        MovieDTO filmeA = new MovieDTO();
+        filmeA.setId(1);
+        filmeA.setTitle("Filme A");
+        filmeA.setGenre_ids(List.of(28, 1, 47, 55));
+
+        MovieDTO filmeB = new MovieDTO();
+        filmeB.setId(2);
+        filmeB.setTitle("Filme B");
+        filmeB.setGenre_ids(List.of(28, 12, 55, 3));
+
+        ResultResponseDTO<MovieDTO> responseDTOFilmeA = new ResultResponseDTO<>();
+        responseDTOFilmeA.setResults(List.of(filmeA));
+
+        ResultResponseDTO<MovieDTO> responseDTOFilmeB = new ResultResponseDTO<>();
+        responseDTOFilmeB.setResults(List.of(filmeB));
+
+        when(tmdbClientFeign.getMovie("Filme A")).thenReturn(responseDTOFilmeA);
+        when(tmdbClientFeign.getMovie("Filme B")).thenReturn(responseDTOFilmeB);
+
+        MovieDTO recommendedMovie1 = new MovieDTO();
+        recommendedMovie1.id = 15;
+        recommendedMovie1.title = "Filme recomendado 1";
+
+        MovieDTO recommendedMovie2 = new MovieDTO();
+        recommendedMovie2.id = 16;
+        recommendedMovie2.title = "Filme recomendado 2";
+
+        ResultResponseDTO<MovieDTO> genreMovies = new ResultResponseDTO<>();
+        genreMovies.setResults(List.of(recommendedMovie1, recommendedMovie2));
+
+        when(tmdbClientFeign.getMoviesByGenre(anyString())).thenReturn(genreMovies);
+
+        List<RecommendedMovieDTO> recommendedMovieDTOS = watchListService.getGenreBasedRecommendations();
+
+        assertNotNull(recommendedMovieDTOS);
+        assertEquals(2, recommendedMovieDTOS.size());
+        assertEquals("Filme recomendado 1", recommendedMovieDTOS.get(0).getTitle());
+
+        verify(watchListRepository, times(1)).findAllByUserId(anyInt());
+        verify(tmdbClientFeign, times(2)).getMovie(any());
+        verify(tmdbClientFeign, times(2)).getMoviesByGenre(anyString());
+    }
 }

@@ -13,15 +13,13 @@ import java.util.stream.Collectors;
 @Service
 public class MovieService {
 
-    @Autowired
     private final TMDBClientFeign tmdbClientFeign;
+    private final MovieRepository movieRepository;
 
     @Autowired
-    private MovieRepository movieRepository;
-
-    @Autowired
-    public MovieService(TMDBClientFeign tmdbClientFeign) {
+    public MovieService(TMDBClientFeign tmdbClientFeign, MovieRepository movieRepository) {
         this.tmdbClientFeign = tmdbClientFeign;
+        this.movieRepository = movieRepository;
     }
 
     public ResultResponseDTO<TrendingMovieDTO> getTrendingMovies(String timeWindow, String language) {

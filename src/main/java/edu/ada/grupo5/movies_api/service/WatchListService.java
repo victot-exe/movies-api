@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,7 +55,12 @@ public class WatchListService {
     @Transactional
     public void deleteByTmdbIdAndByMovieSerieEnum(String tmdbId, MovieSerieEnum movieSerieEnum) {
         Integer userId = getActiveUserId();
-        this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
+        WatchList watchList = watchListRepository.findByTmdbIdAndUserIdAndMovieSerieEnum(tmdbId, userId, movieSerieEnum);
+        if (watchList != null) {
+            this.watchListRepository.deleteByTmdbIdAndMovieSerieEnum(tmdbId, movieSerieEnum, userId);
+        } else {
+            throw new RuntimeException("Item não encontrado em sua WatchList.");
+        }
     }
 
     public Integer getActiveUserId() {
@@ -65,8 +68,6 @@ public class WatchListService {
         return user.getId();
     }
 
-
-    //recomendação por favoritos baseado apenas no repositório.
     public List<RecommendedMovieDTO> getRecommendedMovies() {
         List<WatchList> allFavorites = watchListRepository.findAllFavorites();
 
@@ -90,7 +91,6 @@ public class WatchListService {
     }
 
 
-    //recomendaçao de filme (watched) por genero buscando no TMDB.
     public List<RecommendedMovieDTO> getGenreBasedRecommendations() {
         Integer userId = getActiveUserId();
 
@@ -110,7 +110,7 @@ public class WatchListService {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        List<MovieDTO> recommendedMovies = new ArrayList<>();
+        Set<MovieDTO> recommendedMovies = new HashSet<>();
         for (Integer genreId : popularGenres) {
             ResultResponseDTO<MovieDTO> genreMovies = tmdbClientFeign.getMoviesByGenre(String.valueOf(genreId));
             recommendedMovies.addAll(genreMovies.getResults());
@@ -121,18 +121,6 @@ public class WatchListService {
                 .collect(Collectors.toList());
 
         return recommendedMovieDTOs;
-    }
-
-    //Deletar favorito
-
-    public void delete(String tmdbId) {
-        Integer userId = getActiveUserId();
-        WatchList watchList = watchListRepository.findByTmdbIdAndUserId(tmdbId, userId);
-        if (watchList != null) {
-            watchListRepository.delete(watchList);
-        } else {
-            throw new RuntimeException("Item não encontrado na lista de favoritos.");
-        }
     }
 
 }
