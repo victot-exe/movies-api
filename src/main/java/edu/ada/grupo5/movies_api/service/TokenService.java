@@ -34,8 +34,9 @@ public class TokenService {
     @Autowired
     private UserRepository userRepository;
 
-    public TokenService(TokenRepository tokenRepository) {
+    public TokenService(TokenRepository tokenRepository, UserRepository userRepository) {
         this.tokenRepository = tokenRepository;
+        this.userRepository = userRepository;
     }
 
     public Token generateToken(User user) {
