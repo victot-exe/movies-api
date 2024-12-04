@@ -20,12 +20,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+//TODO: implementar cenários de erro e falhas
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = MoviesApiApplication.class,
@@ -109,6 +112,24 @@ class SeriesControllerTest {
     }
 
     @Test
+    @DisplayName("Deve buscar uma lista vazia")
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void getEmptySerieList() throws Exception {
+        List<SerieDTO> list = new ArrayList<>();
+
+        when(service.getSerie(anyString())).thenReturn(list);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tmdb/tv/search/serie")
+                        .param("serieName", anyString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(("Series fetched successfully")))
+                .andExpect(jsonPath("$.data").isEmpty());
+
+        verify(service, times(1)).getSerie(anyString());
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
     @DisplayName("Deve buscar serie por ID com sucesso")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void getSerieById() throws Exception {
@@ -145,6 +166,27 @@ class SeriesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Series found"))
                 .andExpect(jsonPath("$.data[0].name").value("Breaking Bad"));
+
+        verify(service, times(1)).getAllSerie();
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    @DisplayName("Nao deve retornar nenhuma serie")
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void getAllSeriesButReturnNone() throws Exception {
+        List<Serie> list = new ArrayList<>();
+        ResponseDTO<List<Serie>> response = ResponseDTO.<List<Serie>>builder()
+                .message("Series found")
+                .timestamp(Instant.now())
+                .data(list).build();
+
+        when(service.getAllSerie()).thenReturn(response);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tmdb/tv/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Series found"))
+                .andExpect(jsonPath("$.data").isEmpty());
 
         verify(service, times(1)).getAllSerie();
         verifyNoMoreInteractions(service);
@@ -195,5 +237,11 @@ class SeriesControllerTest {
 
         verify(service, times(1)).deleteSerieById(anyLong());
         verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    @DisplayName("Deve bloquear requisicao por usuario nao autenticado")
+    void errorRequest() {
+
     }
 }
