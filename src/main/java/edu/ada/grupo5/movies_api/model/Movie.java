@@ -14,23 +14,25 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie extends BaseModel {
+
     public boolean adult;
+
     @Column(nullable = false)
     private String title;
+
     @JsonProperty("id")
     public int tmdbId;
+
     @Column(unique = true)
     private String imdb_id;
-    public String original_language;
-    public String original_title;
-    public String release_date;
-    public String status;
-    public double vote_average;
 
-//    private Integer duration;
-//    private String language;
-//    private String director;
-//    private String genre;
-//    @JsonProperty("year")
-//    private Integer releaseYear;
+    public String original_language;
+
+    public String original_title;
+
+    public String release_date;
+
+    public String status;
+
+    public double vote_average;
 }
