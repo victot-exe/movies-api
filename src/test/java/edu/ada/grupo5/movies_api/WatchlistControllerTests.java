@@ -76,4 +76,13 @@ public class WatchlistControllerTests {
 
         verify(watchListService, times(1)).updateWatchListStatus(any(), any(), any());
     }
+
+    @Test
+    public void deleteByTmdbIdAndByMovieSerieEnum_DeveDeletarItemDaWatchlist(){
+        ResponseEntity<Void> response = watchListController.deleteByTmdbIdAndByMovieSerieEnum(tmdbId, movieSerieEnum);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+        verify(watchListService, times(1)).deleteByTmdbIdAndByMovieSerieEnum(any(), any());
+    }
 }
