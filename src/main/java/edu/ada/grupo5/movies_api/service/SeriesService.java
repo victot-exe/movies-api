@@ -8,7 +8,6 @@ import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
 import edu.ada.grupo5.movies_api.model.Serie;
 import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -30,7 +29,7 @@ public class SeriesService {
     public ResponseDTO<ResultResponseDTO<SerieDTO>> getAiringToday(String language, String page) {
         ResultResponseDTO<SerieDTO> data = tmdbClientFeign.getAiringToday(language, page);
         return ResponseDTO.<ResultResponseDTO<SerieDTO>>builder()
-                .message("Airing today fetched sucessfully")
+                .message("Airing today fetched successfully")
                 .timestamp(Instant.now())
                 .data(data)
                 .build();
