@@ -1,6 +1,7 @@
 package edu.ada.grupo5.movies_api;
 
 import edu.ada.grupo5.movies_api.controller.WatchListController;
+import edu.ada.grupo5.movies_api.dto.RecommendedMovieDTO;
 import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.model.MovieSerieEnum;
 import edu.ada.grupo5.movies_api.model.WatchListStatus;
@@ -14,13 +15,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class WatchlistControllerTests {
 
@@ -84,5 +85,25 @@ public class WatchlistControllerTests {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
         verify(watchListService, times(1)).deleteByTmdbIdAndByMovieSerieEnum(any(), any());
+    }
+
+    @Test
+    public void getRecommendations_DeveBuscarRecomendacoes(){
+
+        RecommendedMovieDTO filmeA = new RecommendedMovieDTO("Filme A", "123", 2L);
+        RecommendedMovieDTO filmeB = new RecommendedMovieDTO("Filme B", "001", 1L);
+        List<RecommendedMovieDTO> recommendedMovies = new ArrayList<>();
+        recommendedMovies.add(filmeA);
+        recommendedMovies.add(filmeB);
+
+        when(watchListService.getRecommendedMovies()).thenReturn(recommendedMovies);
+
+        ResponseEntity<List<RecommendedMovieDTO>> response = watchListController.getRecommendations();
+
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Filme A", response.getBody().get(0).getTitle());
+
+        verify(watchListService, times(1)).getRecommendedMovies();
     }
 }

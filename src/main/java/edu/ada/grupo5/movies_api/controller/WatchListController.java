@@ -56,18 +56,11 @@ public class WatchListController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/favorite")
-    public void markAsFavorite(@RequestParam String tmdbId, @RequestParam String title, @RequestParam MovieSerieEnum movieSerieEnum, @RequestParam WatchListStatus watchListStatus) {
-        watchListService.save(tmdbId, title, movieSerieEnum, watchListStatus, true);
-    }
-
-
-
     @GetMapping("/recommendations")
-    public List<RecommendedMovieDTO> getRecommendations() {
-        return watchListService.getRecommendedMovies();
+    public ResponseEntity<List<RecommendedMovieDTO>> getRecommendations() {
+        List<RecommendedMovieDTO> recommendedMovies = watchListService.getRecommendedMovies();
+        return ResponseEntity.status(HttpStatus.FOUND).body(recommendedMovies);
     }
-
 
     @GetMapping("/genrerecommendations")
     public List<RecommendedMovieDTO> getGenreBasedRecommendations() {
