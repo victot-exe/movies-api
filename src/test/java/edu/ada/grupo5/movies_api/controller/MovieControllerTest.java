@@ -19,7 +19,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MoviesApiApplication.class)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        classes = MoviesApiApplication.class
+)
 @AutoConfigureMockMvc
 class MovieControllerTest {
 
@@ -58,6 +61,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DisplayName("Should fetch movie genres and return successfully")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void should_return_movie_genres() throws Exception {
         GenresResponseDTO genresResponse = GenresResponseDTO.builder()
@@ -77,6 +81,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DisplayName("Should fetch movies by name and return successfully")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void should_return_movies_by_name() throws Exception {
         String movieName = "28 Days Later";
