@@ -26,12 +26,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -99,11 +103,19 @@ public class WatchlistControllerTests {
     @WithMockUser(username = "admin", roles = "admin")
     public void getAll() throws Exception {
 
+        List<WatchListDTO> watchListDTO = List.of(
+                new WatchListDTO(title, tmdbId, movieSerieEnum, watchListStatus)
+        );
+
+        when(watchListService.getAll()).thenReturn(watchListDTO);
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/watchlist/all")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isFound());
+                .andExpect(status().isFound())
+                .andExpect(jsonPath("$[0].title", is("Lord of the Rings")))
+                .andExpect(jsonPath("$", hasSize(1)));
 
         verify(watchListService, times(1)).getAll();
     }
@@ -147,11 +159,20 @@ public class WatchlistControllerTests {
     @WithMockUser(username = "admin", roles = "admin")
     public void getRecommendations() throws Exception{
 
+        List<RecommendedMovieDTO> recommendedMovieDTO = List.of(
+                new RecommendedMovieDTO(title, tmdbId, 5),
+                new RecommendedMovieDTO("filme xpto", "123", 1)
+        );
+
+        when(watchListService.getRecommendedMovies()).thenReturn(recommendedMovieDTO);
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/watchlist/recommendations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isFound());
+                .andExpect(status().isFound())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[1].tmdbId", is("123")));
 
         verify(watchListService, times(1)).getRecommendedMovies();
     }
@@ -161,11 +182,22 @@ public class WatchlistControllerTests {
     @WithMockUser(username = "admin", roles = "admin")
     public void getGenreBasedRecommendations() throws Exception{
 
+        List<RecommendedMovieDTO> recommendedMovieDTO = List.of(
+                new RecommendedMovieDTO(title, tmdbId, 5),
+                new RecommendedMovieDTO("filme xpto", "123", 1)
+        );
+
+        when(watchListService.getGenreBasedRecommendations()).thenReturn(recommendedMovieDTO);
+
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/watchlist/genrerecommendations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isFound());
+                .andExpect(status().isFound())
+                .andExpect(jsonPath("$[0].favoriteCount", is(5)))
+                .andExpect(jsonPath("$[0].title", is("Lord of the Rings")));
+
 
         verify(watchListService, times(1)).getGenreBasedRecommendations();
     }
