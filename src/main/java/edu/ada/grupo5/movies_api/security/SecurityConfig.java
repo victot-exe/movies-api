@@ -18,17 +18,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-//TODO : revisar/implementar mais configs de seguranca
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final SecurityFilter securityFilter;
+    private final TokenService tokenService;
+
     @Autowired
-    private SecurityFilter securityFilter;
-    @Autowired
-    private TokenService tokenService;
+    public SecurityConfig(SecurityFilter securityFilter, TokenService tokenService) {
+        this.securityFilter = securityFilter;
+        this.tokenService = tokenService;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
