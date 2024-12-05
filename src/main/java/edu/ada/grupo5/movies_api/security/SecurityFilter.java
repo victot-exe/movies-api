@@ -23,11 +23,14 @@ import java.time.Instant;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public SecurityFilter(TokenService tokenService, UserService userService) {
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
