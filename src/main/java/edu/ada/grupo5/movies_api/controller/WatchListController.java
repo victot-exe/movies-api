@@ -37,8 +37,8 @@ public class WatchListController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<WatchListDTO> getAll() {
-        return this.watchListService.getAll();
+    public ResponseEntity<List<WatchListDTO>> getAll() {
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.watchListService.getAll());
     }
 
     @PutMapping("/{tmdbId}")

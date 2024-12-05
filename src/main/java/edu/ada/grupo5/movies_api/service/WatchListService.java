@@ -1,5 +1,6 @@
 package edu.ada.grupo5.movies_api.service;
 
+import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.Repositories.WatchListRepository;
 import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
 import edu.ada.grupo5.movies_api.dto.RecommendedMovieDTO;
@@ -29,6 +30,8 @@ public class WatchListService {
     private SeriesService seriesService;
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private UserRepository userRepository;
 
     public void save(String tmdbId, String title, MovieSerieEnum movieSerieEnum, WatchListStatus watchListStatus, boolean favorite){
         WatchList watchList = new WatchList(tmdbId, title, movieSerieEnum, watchListStatus, favorite);
@@ -64,8 +67,11 @@ public class WatchListService {
     }
 
     public Integer getActiveUserId() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user.getId();
+        String userDetailsUsername = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        if (userDetailsUsername == null){
+            throw new RuntimeException("Usuário não encontrado");
+        }
+        return userRepository.findUserByLogin(userDetailsUsername).getId();
     }
 
     public List<RecommendedMovieDTO> getRecommendedMovies() {
