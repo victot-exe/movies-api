@@ -13,13 +13,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
+
 @SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
 
+    private final MovieService movieService;
+
     @Autowired
-    private MovieService movieService;
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     @GetMapping("/tmdb/trending/movies/{timeWindow}")
     public ResponseEntity<ResponseDTO<ResultResponseDTO<TrendingMovieDTO>>> getTrendingMovies(
@@ -63,6 +68,5 @@ public class MovieController {
 
         return ResponseEntity.ok(response);
     }
-
 
 }

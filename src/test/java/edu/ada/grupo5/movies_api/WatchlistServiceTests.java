@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -34,6 +35,7 @@ import static org.mockito.Mockito.*;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class WatchlistServiceTests {
 
+    @Spy
     @InjectMocks
     private WatchListService watchListService;
 
@@ -53,12 +55,15 @@ public class WatchlistServiceTests {
     void setUp() {
         User user = new User("testUser", "password", UserRole.ADMIN);
         user.setId(1);
+
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         Authentication authentication = Mockito.mock(Authentication.class);
 
         Mockito.when(authentication.getPrincipal()).thenReturn(user);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
+
+        doReturn(1).when(watchListService).getActiveUserId();
     }
 
     @Test
@@ -145,6 +150,9 @@ public class WatchlistServiceTests {
 
         String tmdbId = "123";
         MovieSerieEnum movieSerieEnum = MovieSerieEnum.MOVIE;
+
+        when(watchListRepository.findByTmdbIdAndUserIdAndMovieSerieEnum(tmdbId, 1, movieSerieEnum))
+                .thenReturn(new WatchList(tmdbId, "Titulo XPTO", movieSerieEnum, WatchListStatus.WATCHED));
 
         watchListService.deleteByTmdbIdAndByMovieSerieEnum(tmdbId, movieSerieEnum);
 
