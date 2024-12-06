@@ -1,4 +1,4 @@
-package edu.ada.grupo5.movies_api;
+package edu.ada.grupo5.movies_api.service;
 
 import edu.ada.grupo5.movies_api.Repositories.WatchListRepository;
 import edu.ada.grupo5.movies_api.client.api.TMDBClientFeign;
@@ -7,9 +7,6 @@ import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.MovieDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.model.*;
-import edu.ada.grupo5.movies_api.service.MovieService;
-import edu.ada.grupo5.movies_api.service.SeriesService;
-import edu.ada.grupo5.movies_api.service.WatchListService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +21,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.*;
 
@@ -31,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class WatchlistServiceTests {
