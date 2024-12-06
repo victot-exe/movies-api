@@ -7,6 +7,7 @@ import edu.ada.grupo5.movies_api.dto.tmdb.ResultResponseDTO;
 import edu.ada.grupo5.movies_api.dto.tmdb.SerieDTO;
 import edu.ada.grupo5.movies_api.model.Serie;
 import edu.ada.grupo5.movies_api.service.SeriesService;
+import edu.ada.grupo5.movies_api.service.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -28,11 +30,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//TODO: implementar cenários de erro e falhas
-
 @AutoConfigureMockMvc
 @SpringBootTest(classes = MoviesApiApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class SeriesControllerTest {
 
     @Autowired
@@ -240,8 +241,24 @@ class SeriesControllerTest {
     }
 
     @Test
-    @DisplayName("Deve bloquear requisicao por usuario nao autenticado")
-    void errorRequest() {
+    @DisplayName("Deve bloquear requisicao por usuario nao logado")
+    void errorRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/tmdb/tv/airing_today"))
+                .andExpect(status().isForbidden());
+    }
 
+    @Test
+    @DisplayName("Deve retornar erro ao buscar série inexistente por ID")
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void getSerieByNonexistentId() throws Exception {
+        when(service.searchSerie(anyInt(), anyString(), anyString()))
+                .thenThrow(new ResourceNotFoundException("Serie not found"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tmdb/tv/searchById/999"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Serie not found"));
+
+        verify(service, times(1)).searchSerie(anyInt(), anyString(), anyString());
+        verifyNoMoreInteractions(service);
     }
 }
