@@ -15,18 +15,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-// TODO : Criar testes para os cenarios de erros
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class SeriesServiceTest {
 
@@ -85,18 +86,18 @@ class SeriesServiceTest {
         responseDTO.setTotalPages(1);
         responseDTO.setTotalResults(1);
         responseDTO.setResults(Collections.singletonList(serie));
-        when(feign.getAiringToday("en-US","")).thenReturn(responseDTO);
+        when(feign.getAiringToday("en-US", "")).thenReturn(responseDTO);
 
-        ResultResponseDTO<SerieDTO> result = service.getAiringToday("en-US","").getData();
+        ResultResponseDTO<SerieDTO> result = service.getAiringToday("en-US", "").getData();
 
         assertThat(result).isEqualTo(responseDTO);
         assertThat(result.getPage()).isEqualTo(1);
         assertThat(result.getTotalPages()).isEqualTo(1);
         assertThat(result.getResults().size()).isEqualTo(1);
         assertThat(result.getTotalResults()).isEqualTo(1);
-        assertThat(service.getAiringToday("en-US","").getMessage()).isEqualTo("Airing today fetched sucessfully");
+        assertThat(service.getAiringToday("en-US", "").getMessage()).isEqualTo("Airing today fetched successfully");
 
-        verify(feign,times(2)).getAiringToday("en-US","");
+        verify(feign, times(2)).getAiringToday("en-US", "");
     }
 
     @Test
@@ -107,14 +108,14 @@ class SeriesServiceTest {
                 .data(serie)
                 .build();
         int serieId = 1100;
-        when(feign.searchSerieById(serieId,"","en-US")).thenReturn(serie);
+        when(feign.searchSerieById(serieId, "", "en-US")).thenReturn(serie);
 
         assertThat(response).isNotNull();
         assertThat(response.getData()).isEqualTo(serie);
         assertThat(response.getMessage()).isEqualTo("Serie found");
-        assertEquals(response.getData(), service.searchSerie(serieId,"","en-US").getData());
+        assertEquals(response.getData(), service.searchSerie(serieId, "", "en-US").getData());
 
-        verify(feign,times(1)).searchSerieById(serieId,"","en-US");
+        verify(feign, times(1)).searchSerieById(serieId, "", "en-US");
     }
 
     @Test
@@ -167,7 +168,7 @@ class SeriesServiceTest {
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.getFirst().getId()).isEqualTo(serie.getId());
 
-        verify(feign,times(1)).getSerie(anyString());
+        verify(feign, times(1)).getSerie(anyString());
 
     }
 
@@ -175,14 +176,14 @@ class SeriesServiceTest {
     @DisplayName("Deve salvar assim que buscada")
     void saveSerieBySearch() {
 
-        when(feign.searchSerieById(anyInt(),anyString(),anyString())).thenReturn(serie);
+        when(feign.searchSerieById(anyInt(), anyString(), anyString())).thenReturn(serie);
         when(repository.save(any(Serie.class))).thenReturn(entity);
 
         service.saveSerieBySearch(anyInt());
 
         verify(repository, times(1)).save(any(Serie.class));
         verify(repository, times(2)).existsByTmdbId(any(Integer.class));
-        verify(feign, times(1)).searchSerieById(anyInt(),anyString(),anyString());
+        verify(feign, times(1)).searchSerieById(anyInt(), anyString(), anyString());
 
 
     }
@@ -192,7 +193,7 @@ class SeriesServiceTest {
     void updateSerie() {
         SerieDTO updatedSerie = new SerieDTO();
         Serie updatedEntity = new Serie();
-        BeanUtils.copyProperties(serie,updatedSerie);
+        BeanUtils.copyProperties(serie, updatedSerie);
         BeanUtils.copyProperties(entity, updatedEntity);
 
         Serie serieToUpdate = entity;
@@ -232,6 +233,7 @@ class SeriesServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lancar uma excessao ao deletar invalido")
     void DeveLancarExcessaoAoDeletar() {
         when(repository.existsById(any(Long.class))).thenReturn(false);
 
@@ -239,6 +241,19 @@ class SeriesServiceTest {
             service.deleteSerieById(anyLong());
         });
         assertThat(exception.getMessage()).isEqualTo("Serie not found");
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao tentar salvar série já existente")
+    void saveSerieQueJaExiste() {
+        when(repository.existsByTmdbId(serie.getId())).thenReturn(true);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.saveSerie(serie);
+        });
+
+        assertThat(exception).isInstanceOf(RuntimeException.class);
+        verify(repository, never()).save(any(Serie.class));
     }
 
 }

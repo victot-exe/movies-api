@@ -1,4 +1,4 @@
-package edu.ada.grupo5.movies_api;
+package edu.ada.grupo5.movies_api.controller;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -7,11 +7,12 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.matchesPattern;
 
-// Do not forget to initialize the database to run the tests
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthControllerTest { // For some reason running all tests at once can cause some but that only the first pass, please try to run one at the time
 	@LocalServerPort

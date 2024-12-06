@@ -1,8 +1,8 @@
-package edu.ada.grupo5.movies_api;
+package edu.ada.grupo5.movies_api.controller;
 
+import edu.ada.grupo5.movies_api.MoviesApiApplication;
 import edu.ada.grupo5.movies_api.Repositories.UserRepository;
 import edu.ada.grupo5.movies_api.Repositories.WatchListRepository;
-import edu.ada.grupo5.movies_api.controller.WatchListController;
 import edu.ada.grupo5.movies_api.dto.RecommendedMovieDTO;
 import edu.ada.grupo5.movies_api.dto.WatchListDTO;
 import edu.ada.grupo5.movies_api.model.*;
@@ -10,23 +10,17 @@ import edu.ada.grupo5.movies_api.service.WatchListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -38,6 +32,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(
         classes = MoviesApiApplication.class,
