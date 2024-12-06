@@ -26,14 +26,12 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Autowired
     private final TokenRepository tokenRepository;
-
+    private final UserRepository userRepository;
     @Value("${tmdb.api.secret}")
     private String secret;
-    @Autowired
-    private UserRepository userRepository;
 
+    @Autowired
     public TokenService(TokenRepository tokenRepository, UserRepository userRepository) {
         this.tokenRepository = tokenRepository;
         this.userRepository = userRepository;

@@ -221,7 +221,6 @@ class SeriesServiceTest {
     @DisplayName("Deve deletar com sucesso")
     void deleteSerieById() {
         when(repository.existsById(any(Long.class))).thenReturn(true);
-
         ResponseDTO<String> responseDTO = service.deleteSerieById(anyLong());
 
         assertThat(responseDTO).isNotNull();
