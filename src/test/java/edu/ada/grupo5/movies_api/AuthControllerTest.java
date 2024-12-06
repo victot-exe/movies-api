@@ -11,7 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.matchesPattern;
 
-
+// Do not forget to initialize the database to run the tests
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthControllerTest { // For some reason running all tests at once can cause some but that only the first pass, please try to run one at the time
 	@LocalServerPort
